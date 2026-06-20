@@ -8,7 +8,7 @@ import {
     Button
 } from "./headerStyles";
 
-import { Link } from 'react-router-dom'; // ← ADICIONE ISSO
+import { Link } from 'react-router-dom';
 
 import logoImage from '../../assets/images/usesouzalogo.jpg'
 import SearchInput from "../searchInput/searchInput";
@@ -32,7 +32,9 @@ function Header() {
         <HeaderContainer>
 
             <LogoNameContainer>
-                <LogoImg src={logoImage}/>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <LogoImg src={logoImage}/>
+                </Link>
                 <div ref={cardRef} className={`card ${isActive ? 'active' : ''}`}>
                     <div className="content">
                         <div className="logo">
@@ -50,7 +52,6 @@ function Header() {
             <SearchContainer>
                 <SearchInput/>
             </SearchContainer>
-
 
             <RegisterLoginContainer>
                 <svg
@@ -73,7 +74,9 @@ function Header() {
                     </Link>
                 </ButtonsContainer>
 
-                <ShoppingCart quantity={3} />
+                <Link to="/cart" style={{ textDecoration: 'none' }}>
+                    <ShoppingCart quantity={3} />
+                </Link>
             </RegisterLoginContainer>
         </HeaderContainer>
     )
