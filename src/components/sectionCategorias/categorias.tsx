@@ -9,7 +9,7 @@ import image1 from '../../assets/images/pulseiras.jpg'
 import image2 from '../../assets/images/pingentes.jpg'
 import image3 from '../../assets/images/pingentes2.jpg'
 import image4 from '../../assets/images/corrente2.jpg'
-import { TextContainer } from "../../pages/home/homeStyles";
+import { TextContainer } from "../../pages/Home/HomeStyles";
 
 function Categorias () {
     return (

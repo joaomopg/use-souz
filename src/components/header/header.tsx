@@ -8,11 +8,12 @@ import {
     Button
 } from "./headerStyles";
 
+import { Link } from 'react-router-dom'; // ← ADICIONE ISSO
+
 import logoImage from '../../assets/images/usesouzalogo.jpg'
 import SearchInput from "../searchInput/searchInput";
 import ShoppingCart from "../shoppingCart/shoppingCart";
 import { useEffect, useRef, useState } from "react";
-
 
 function Header() {
 
@@ -53,19 +54,23 @@ function Header() {
 
             <RegisterLoginContainer>
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="32"
-                    height="32"
-                    fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        height="32"
+                        fill="currentColor"
                     >
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm0 15c-2.33 0-4.43-.95-5.96-2.48.16-2.02 4-3.12 5.96-3.12 1.95 0 5.8 1.1 5.96 3.12A8.45 8.45 0 0112 20z"/>
                 </svg>
 
                 <ButtonsContainer>
-                    <Button>Cadastre-se</Button>
+                    <Link to="/register" style={{ textDecoration: 'none' }}>
+                        <Button>Cadastre-se</Button>
+                    </Link>
                     |
-                    <Button style={{marginLeft: '10px'}}>Login</Button>
+                    <Link to="/login" style={{ textDecoration: 'none', marginLeft: '10px' }}>
+                        <Button>Login</Button>
+                    </Link>
                 </ButtonsContainer>
 
                 <ShoppingCart quantity={3} />
