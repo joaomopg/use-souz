@@ -1,5 +1,5 @@
 import { Container } from "./infiniteSliderStyles";
-import image1 from '../../assets/corrente2.jpg'
+import image1 from '../../assets/images/corrente2.jpg'
 
 const cards = [
   {

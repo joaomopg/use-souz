@@ -1,4 +1,11 @@
-import { Card, CardIcon, Section, SubTitle, TextsContainer, Title } from "./sectionInfosStyles";
+import { 
+    Card, 
+    CardIcon, 
+    Section, 
+    SubTitle, 
+    TextsContainer, 
+    Title 
+} from "./sectionInfosStyles";
 
 function Infos () {
     return (

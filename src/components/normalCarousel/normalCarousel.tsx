@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowButton, Card, CarouselContainer, Container, TitleContainer, Track, Viewport } from "./normalCarouselStyles";
 import ReviewCard from "../ReviewCard/ReviewCard";
-import reviewImage from '../../assets/pingentes.jpg'
+import reviewImage from '../../assets/images/pingentes.jpg'
 
 const cards = [
     {   

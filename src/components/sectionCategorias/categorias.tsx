@@ -5,11 +5,12 @@ import {
     CategoriasCardsContainer, 
     CategoriasContainer 
 } from "./categoriasStyles";
-import image1 from '../../assets/pulseiras.jpg'
-import image2 from '../../assets/pingentes.jpg'
-import image3 from '../../assets/pingentes2.jpg'
-import image4 from '../../assets/corrente2.jpg'
-import { TextContainer } from "../../App";
+import image1 from '../../assets/images/pulseiras.jpg'
+import image2 from '../../assets/images/pingentes.jpg'
+import image3 from '../../assets/images/pingentes2.jpg'
+import image4 from '../../assets/images/corrente2.jpg'
+import { TextContainer } from "../../pages/home/homeStyles";
+
 function Categorias () {
     return (
         <CategoriasContainer>

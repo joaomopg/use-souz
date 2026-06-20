@@ -12,14 +12,14 @@ import {
   FooterCopyright,
 } from "./footerStyles";
 
-import visa from '../../assets/visa.png'
-import mastercard from '../../assets/mastercard.png'
-import pix from '../../assets/pix.png'
-import elo from '../../assets/elo.png'
-import transporte1 from '../../assets/transporte1.png'
-import transporte2 from '../../assets/transporte2.png'
-import seguranca from '../../assets/seguranca1.png'
-import logo from '../../assets/usesouzlogotransparent.png'
+import visa from '../../assets/images/visa.png'
+import mastercard from '../../assets/images/mastercard.png'
+import pix from '../../assets/images/pix.png'
+import elo from '../../assets/images/elo.png'
+import transporte1 from '../../assets/images/transporte1.png'
+import transporte2 from '../../assets/images/transporte2.png'
+import seguranca from '../../assets/images/seguranca1.png'
+import logo from '../../assets/images/usesouzlogotransparent.png'
 
 export default function Footer() {
 

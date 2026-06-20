@@ -8,7 +8,7 @@ import {
     Button
 } from "./headerStyles";
 
-import logoImage from '../../assets/usesouzalogo.jpg'
+import logoImage from '../../assets/images/usesouzalogo.jpg'
 import SearchInput from "../searchInput/searchInput";
 import ShoppingCart from "../shoppingCart/shoppingCart";
 import { useEffect, useRef, useState } from "react";
