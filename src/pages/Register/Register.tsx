@@ -5,12 +5,16 @@ import {
   Container,
   Card,
   Title,
+  Subtitle,
   Form,
   InputGroup,
-  Label,
+  InputWrapper,
+  InputIcon,
   Input,
+  FloatingLabel,
   ErrorText,
   SubmitButton,
+  Spinner,
   LoginLink,
   GlobalError,
 } from './RegisterStyles';
@@ -47,7 +51,6 @@ export function Register() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Limpa erro do campo ao digitar
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -102,72 +105,109 @@ export function Register() {
     }
   };
 
+  const getIcon = (field: string) => {
+    switch (field) {
+      case 'name': return '👤';
+      case 'email': return '✉️';
+      case 'password':
+      case 'confirmPassword': return '🔒';
+      default: return '';
+    }
+  };
+
   return (
     <Container>
       <Card>
         <Title>Criar Conta</Title>
+        <Subtitle>Preencha os dados para se cadastrar</Subtitle>
 
-        {globalError && <GlobalError>{globalError}</GlobalError>}
+        {globalError && (
+          <GlobalError>
+            <span>⚠️</span> {globalError}
+          </GlobalError>
+        )}
 
         <Form onSubmit={handleSubmit} noValidate>
           <InputGroup>
-            <Label htmlFor="name">Nome</Label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Seu nome completo"
-              value={formData.name}
-              onChange={handleChange}
-              $hasError={!!errors.name}
-            />
-            {errors.name && <ErrorText>{errors.name}</ErrorText>}
+            <InputWrapper>
+              <InputIcon>{getIcon('name')}</InputIcon>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                $hasError={!!errors.name}
+                $hasValue={!!formData.name}
+                placeholder=" "
+              />
+              <FloatingLabel htmlFor="name">Nome completo</FloatingLabel>
+            </InputWrapper>
+            {errors.name && <ErrorText><span>⚠️</span> {errors.name}</ErrorText>}
           </InputGroup>
 
           <InputGroup>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="seu@email.com"
-              value={formData.email}
-              onChange={handleChange}
-              $hasError={!!errors.email}
-            />
-            {errors.email && <ErrorText>{errors.email}</ErrorText>}
+            <InputWrapper>
+              <InputIcon>{getIcon('email')}</InputIcon>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                $hasError={!!errors.email}
+                $hasValue={!!formData.email}
+                placeholder=" "
+              />
+              <FloatingLabel htmlFor="email">Email</FloatingLabel>
+            </InputWrapper>
+            {errors.email && <ErrorText><span>⚠️</span> {errors.email}</ErrorText>}
           </InputGroup>
 
           <InputGroup>
-            <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Mínimo 6 caracteres"
-              value={formData.password}
-              onChange={handleChange}
-              $hasError={!!errors.password}
-            />
-            {errors.password && <ErrorText>{errors.password}</ErrorText>}
+            <InputWrapper>
+              <InputIcon>{getIcon('password')}</InputIcon>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                $hasError={!!errors.password}
+                $hasValue={!!formData.password}
+                placeholder=" "
+              />
+              <FloatingLabel htmlFor="password">Senha</FloatingLabel>
+            </InputWrapper>
+            {errors.password && <ErrorText><span>⚠️</span> {errors.password}</ErrorText>}
           </InputGroup>
 
           <InputGroup>
-            <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Repita sua senha"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              $hasError={!!errors.confirmPassword}
-            />
-            {errors.confirmPassword && <ErrorText>{errors.confirmPassword}</ErrorText>}
+            <InputWrapper>
+              <InputIcon>{getIcon('confirmPassword')}</InputIcon>
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                $hasError={!!errors.confirmPassword}
+                $hasValue={!!formData.confirmPassword}
+                placeholder=" "
+              />
+              <FloatingLabel htmlFor="confirmPassword">Confirmar senha</FloatingLabel>
+            </InputWrapper>
+            {errors.confirmPassword && <ErrorText><span>⚠️</span> {errors.confirmPassword}</ErrorText>}
           </InputGroup>
 
           <SubmitButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
+            {isSubmitting ? (
+              <>
+                <Spinner /> Cadastrando...
+              </>
+            ) : (
+              'Cadastrar'
+            )}
           </SubmitButton>
         </Form>
 

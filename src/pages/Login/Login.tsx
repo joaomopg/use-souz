@@ -5,12 +5,16 @@ import {
   Container,
   Card,
   Title,
+  Subtitle,
   Form,
   InputGroup,
-  Label,
+  InputWrapper,
+  InputIcon,
   Input,
+  FloatingLabel,
   ErrorText,
   SubmitButton,
+  Spinner,
   RegisterLink,
   GlobalError,
 } from './LoginStyles';
@@ -87,40 +91,59 @@ export function Login() {
     <Container>
       <Card>
         <Title>Entrar</Title>
+        <Subtitle>Acesse sua conta</Subtitle>
 
-        {globalError && <GlobalError>{globalError}</GlobalError>}
+        {globalError && (
+          <GlobalError>
+            <span>⚠️</span> {globalError}
+          </GlobalError>
+        )}
 
         <Form onSubmit={handleSubmit} noValidate>
           <InputGroup>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="seu@email.com"
-              value={formData.email}
-              onChange={handleChange}
-              $hasError={!!errors.email}
-            />
-            {errors.email && <ErrorText>{errors.email}</ErrorText>}
+            <InputWrapper>
+              <InputIcon>✉️</InputIcon>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                $hasError={!!errors.email}
+                $hasValue={!!formData.email}
+                placeholder=" "
+              />
+              <FloatingLabel htmlFor="email">Email</FloatingLabel>
+            </InputWrapper>
+            {errors.email && <ErrorText><span>⚠️</span> {errors.email}</ErrorText>}
           </InputGroup>
 
           <InputGroup>
-            <Label htmlFor="password">Senha</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Sua senha"
-              value={formData.password}
-              onChange={handleChange}
-              $hasError={!!errors.password}
-            />
-            {errors.password && <ErrorText>{errors.password}</ErrorText>}
+            <InputWrapper>
+              <InputIcon>🔒</InputIcon>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                $hasError={!!errors.password}
+                $hasValue={!!formData.password}
+                placeholder=" "
+              />
+              <FloatingLabel htmlFor="password">Senha</FloatingLabel>
+            </InputWrapper>
+            {errors.password && <ErrorText><span>⚠️</span> {errors.password}</ErrorText>}
           </InputGroup>
 
           <SubmitButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Entrando...' : 'Entrar'}
+            {isSubmitting ? (
+              <>
+                <Spinner /> Entrando...
+              </>
+            ) : (
+              'Entrar'
+            )}
           </SubmitButton>
         </Form>
 
