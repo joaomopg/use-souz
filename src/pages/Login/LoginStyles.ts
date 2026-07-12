@@ -153,6 +153,15 @@ export const Input = styled.input<InputProps>`
     transform: translateY(-28px) scale(0.85);
     color: #d4af37;
   }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 `;
 
 // ── Floating Label ──
