@@ -1,5 +1,5 @@
 import { useState, useContext, type FormEvent, type ChangeEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import {
   Container,
@@ -31,7 +31,11 @@ interface FormErrors {
 
 export function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useContext(AuthContext);
+
+  // Se veio de uma rota protegida (ex: /cart), volta pra lá depois do login
+  const from = (location.state as any)?.from?.pathname || '/catalog';
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -77,7 +81,8 @@ export function Login() {
     setIsSubmitting(true);
     try {
       await login(formData.email, formData.password);
-      navigate('/catalog');
+      // Redireciona para a página que o usuário tentou acessar (ou /catalog por padrão)
+      navigate(from, { replace: true });
     } catch (error: any) {
       setGlobalError(
         error?.response?.data?.message || 'Erro ao fazer login. Tente novamente.'
