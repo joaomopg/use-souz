@@ -12,13 +12,17 @@ import logoImage from '../../assets/images/usesouzalogo.jpg'
 import SearchInput from "../searchInput/searchInput";
 import ShoppingCart from "../shoppingCart/shoppingCart";
 import { useEffect, useRef, useState } from "react";
+import { useCart } from "../../contexts/shoppingCartContext";
+import { useCartDrawer } from "../../contexts/cartDrawerContext";
 
 
 function Header() {
 
     const [isActive, setIsActive] = useState(false);
     const cardRef = useRef(null);
-
+    const { items, totalItems } = useCart();
+    const { isOpen, openDrawer } = useCartDrawer();
+    
     useEffect(() => {
         const timer = setTimeout(() => {
         setIsActive(true);
@@ -68,7 +72,8 @@ function Header() {
                     <Button style={{marginLeft: '10px'}}>Login</Button>
                 </ButtonsContainer>
 
-                <ShoppingCart quantity={3} />
+                <ShoppingCart quantity={totalItems} openDrawer={openDrawer}/>
+
             </RegisterLoginContainer>
         </HeaderContainer>
     )

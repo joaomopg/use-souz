@@ -6,11 +6,12 @@ import {
 
 type ShoppingCartProps = {
   quantity: number;
+  openDrawer: () => void;
 };
 
-function ShoppingCart({ quantity }: ShoppingCartProps) {
+function ShoppingCart({ quantity, openDrawer }: ShoppingCartProps) {
   return (
-    <CartContainer>
+    <CartContainer onClick={openDrawer}>
       <CartIcon
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

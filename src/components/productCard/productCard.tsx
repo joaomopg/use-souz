@@ -14,10 +14,15 @@ import {
   PixPrice,
   Installments,
   BuyButton,
+  AddCartButton,
+  Actions,
 } from "./productCardStyles";
 
+import { useNavigate } from "react-router-dom";
+
 interface ProductCardProps {
-  image: string;
+  id: number,
+  image: string[];
   name: string;
   oldPrice: string;
   currentPrice: string;
@@ -26,9 +31,12 @@ interface ProductCardProps {
   discount?: string;
   freeShipping?: boolean;
   sizes?: string[];
+  description?: string;
+  onAddToCart?: () => void;
 }
 
 export default function ProductCard({
+  id,
   image,
   name,
   oldPrice,
@@ -38,12 +46,21 @@ export default function ProductCard({
   discount,
   freeShipping,
   sizes = [],
+  description,
+  onAddToCart,
 }: ProductCardProps) {
+
+  const navigate = useNavigate();
+
+  function abrirProduto() {
+      navigate(`/produtos/${id}`);
+    }
+
   return (
-    <Card>
+    <Card onClick={abrirProduto}>
       <ImageContainer>
         <ProductImage
-          src={image}
+          src={image[0]}
           alt={name}
         />
 
@@ -59,6 +76,7 @@ export default function ProductCard({
       </ImageContainer>
 
       <Content>
+
         <ProductName>{name}</ProductName>
 
         <SizesContainer>
@@ -77,15 +95,30 @@ export default function ProductCard({
           </CurrentPrice>
         </PriceContainer>
 
-        <PixPrice>{pixPrice}</PixPrice>
+        <PixPrice>
+          ou {pixPrice} no Pix
+        </PixPrice>
 
         <Installments>
           {installments}
         </Installments>
 
-        <BuyButton>
-          🛒 COMPRAR
-        </BuyButton>
+        <Actions>
+
+          <BuyButton>
+            COMPRAR
+          </BuyButton>
+
+          <AddCartButton
+              onClick={(e) => {
+                  e.stopPropagation();
+
+                  onAddToCart?.();
+              }}
+          >
+              🛒 Adicionar ao carrinho
+          </AddCartButton>
+        </Actions>
       </Content>
     </Card>
   );
