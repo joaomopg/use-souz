@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const CarouselContainer = styled.div`
-    width: 100%;
-    height: 600px;
+    aspect-ratio: 2098 / 750;
+    height: auto;
 
     position: relative;
 
@@ -25,12 +25,12 @@ export const CarouselTrack = styled.div<{
 `;
 
 export const Slide = styled.img`
-    min-width: 100%;
+    width: 100%;
     height: 100%;
 
-    object-fit: cover;
+    object-fit: contain;
 
-    user-select: none;
+    display: block;
 `;
 
 export const NavigationButton = styled.button<{

@@ -1,193 +1,304 @@
-import { useState, type Dispatch, type SetStateAction } from 'react';
+import type {
+    Dispatch,
+    SetStateAction
+} from "react";
+
 import {
     Container,
     Breadcrumb,
     ProductTitle,
     Rating,
-    ProductCode,
     PriceSection,
     SizeSection,
     QuantitySection,
     BuySection,
     FavoriteButton,
-    OldPrice,
     CurrentPrice,
-    DiscountBadge,
     PixPrice,
     Installments,
     SectionTitle,
-    SizeOptions,
-    SizeButton,
     QuantitySelector,
     QuantityButton,
     QuantityValue,
     BuyNowButton,
     AddToCartButton,
     ProductMeta,
-    ProductHeader,
-} from './ProductInfoStyles';
+    ProductHeader
+} from "./ProductInfoStyles";
 
-import type { Produto } from '../../../../types/Produto';
+import type {
+    ProdutoDetalheApi,
+    ProdutoVariacaoApi
+} from "../../../../types/ProdutoDetalheApi";
+
+import VariationSelector
+    from "../../../../components/VariationSelector/VariationSelector";
 
 interface ProductInfoProps {
-    produto: Produto;
+    produto: ProdutoDetalheApi;
+
+    variacaoSelecionada:
+    ProdutoVariacaoApi | null;
+
+    setVariacaoSelecionada:
+    Dispatch<
+        SetStateAction<
+            ProdutoVariacaoApi | null
+        >
+    >;
 
     quantidade: number;
-    setQuantidade: Dispatch<SetStateAction<number>>;
 
-    tamanhoSelecionado: string;
-    setTamanhoSelecionado: Dispatch<SetStateAction<string>>;
+    setQuantidade:
+    Dispatch<
+        SetStateAction<number>
+    >;
 
-    adicionarAoCarrinho: () => void;
+    adicionarAoCarrinho:
+    () => void;
+}
+
+function formatarDinheiro(
+    valor: number
+): string {
+    return new Intl.NumberFormat(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    ).format(valor);
+}
+
+function obterPrecoTotal(
+    variacao:
+        ProdutoVariacaoApi | null,
+    quantidade: number
+): number | null {
+    if (!variacao) {
+        return null;
+    }
+
+    if (quantidade <= 3) {
+        const preco =
+            variacao.precos.find(
+                (item) =>
+                    item.quantidade ===
+                    quantidade
+            );
+
+        return preco
+            ? preco.precoTotal
+            : null;
+    }
+
+    const precoTres =
+        variacao.precos.find(
+            (item) =>
+                item.quantidade === 3
+        );
+
+    if (!precoTres) {
+        return null;
+    }
+
+    const precoUnitario =
+        precoTres.precoTotal / 3;
+
+    return (
+        precoTres.precoTotal +
+        precoUnitario *
+        (quantidade - 3)
+    );
 }
 
 export default function ProductInfo({
-    produto, 
-    quantidade, 
-    setQuantidade, 
-    tamanhoSelecionado, 
-    setTamanhoSelecionado,
+    produto,
+    variacaoSelecionada,
+    setVariacaoSelecionada,
+    quantidade,
+    setQuantidade,
     adicionarAoCarrinho
 }: ProductInfoProps) {
+    const precoTotal =
+        obterPrecoTotal(
+            variacaoSelecionada,
+            quantidade
+        );
 
     return (
-
         <Container>
-
             <ProductHeader>
-
-
                 <Breadcrumb>
-                    Home / Correntes / Corrente Grumet
+                    Home / {produto.categoria.nome} /{" "}
+                    {produto.nome}
                 </Breadcrumb>
 
                 <ProductTitle>
-                    {produto.name}
+                    {produto.nome}
                 </ProductTitle>
 
                 <ProductMeta>
-
                     <Rating>
-                        ★★★★★ (32 avaliações)
+                        ★★★★★
                     </Rating>
-
-                    <ProductCode>
-                        Código: 000123
-                    </ProductCode>
-
                 </ProductMeta>
-
-
             </ProductHeader>
 
-
             <PriceSection>
-
-                <OldPrice>
-                    {produto.oldPrice}
-                </OldPrice>
-
                 <CurrentPrice>
-                    {produto.currentPrice}
+                    {precoTotal !== null
+                        ? formatarDinheiro(
+                            precoTotal
+                        )
+                        : "Preço indisponível"}
                 </CurrentPrice>
 
-                <DiscountBadge>
-                    {produto.discount}
-                </DiscountBadge>
-
                 <PixPrice>
-                    ou <strong>{produto.pixPrice}</strong> no Pix
+                    Preço total para{" "}
+                    <strong>
+                        {quantidade}{" "}
+                        {quantidade === 1
+                            ? "unidade"
+                            : "unidades"}
+                    </strong>
                 </PixPrice>
 
                 <Installments>
-                    {produto.installments}
+                    Os descontos são aplicados
+                    automaticamente conforme a
+                    quantidade.
                 </Installments>
-
             </PriceSection>
 
             <SizeSection>
-
                 <SectionTitle>
-                    Tamanho
+                    Escolha a variação
                 </SectionTitle>
 
-                <SizeOptions>
+                <VariationSelector
+                    variacoes={
+                        produto.variacoes.map(
+                            (variacao) => ({
+                                id: variacao.id,
 
-                    {produto.sizes.map((tamanho) => (
-                        
-                        <SizeButton
-                            key={tamanho}
-                            $selected={tamanhoSelecionado === tamanho}
-                            onClick={() => setTamanhoSelecionado(tamanho)}
-                        >
+                                sku: variacao.sku,
 
-                            {tamanho}
+                                atributos:
+                                    variacao.atributos,
 
-                        </SizeButton>
+                                preco:
+                                    variacao.precos.find(
+                                        (preco) =>
+                                            preco.quantidade === 1
+                                    )?.precoTotal ?? null,
 
-                    ))}
+                                precos:
+                                    variacao.precos.map(
+                                        (preco) => ({
+                                            quantidade:
+                                                Number(
+                                                    preco.quantidade
+                                                ),
 
-                </SizeOptions>
+                                            precoTotal:
+                                                Number(
+                                                    preco.precoTotal
+                                                )
+                                        })
+                                    )
+                            })
+                        )
+                    }
 
+                    variacaoSelecionadaId={
+                        variacaoSelecionada?.id ?? null
+                    }
+
+                    onSelect={(variacaoId) => {
+                        const variacao =
+                            produto.variacoes.find(
+                                (item) =>
+                                    item.id ===
+                                    variacaoId
+                            );
+
+                        if (variacao) {
+                            setVariacaoSelecionada(
+                                variacao
+                            );
+                        }
+                    }}
+                />
             </SizeSection>
 
             <QuantitySection>
-
                 <SectionTitle>
                     Quantidade
                 </SectionTitle>
 
                 <QuantitySelector>
-
                     <QuantityButton
+                        type="button"
                         onClick={() =>
-                            setQuantidade((q) => Math.max(1, q - 1))
+                            setQuantidade(
+                                (atual) =>
+                                    Math.max(
+                                        1,
+                                        atual - 1
+                                    )
+                            )
                         }
                     >
                         −
                     </QuantityButton>
 
                     <QuantityValue>
-
                         {quantidade}
-
                     </QuantityValue>
 
                     <QuantityButton
+                        type="button"
                         onClick={() =>
-                            setQuantidade((q) => q + 1)
+                            setQuantidade(
+                                (atual) =>
+                                    atual + 1
+                            )
                         }
                     >
                         +
                     </QuantityButton>
-
                 </QuantitySelector>
-
             </QuantitySection>
 
             <BuySection>
-
-                <BuyNowButton>
-
+                <BuyNowButton
+                    type="button"
+                    disabled={
+                        !variacaoSelecionada
+                    }
+                >
                     Comprar agora
-
                 </BuyNowButton>
 
-                <AddToCartButton onClick={adicionarAoCarrinho}>
-
+                <AddToCartButton
+                    type="button"
+                    disabled={
+                        !variacaoSelecionada
+                    }
+                    onClick={
+                        adicionarAoCarrinho
+                    }
+                >
                     Adicionar ao carrinho
-
                 </AddToCartButton>
-
             </BuySection>
 
-            <FavoriteButton>
-
+            <FavoriteButton
+                type="button"
+            >
                 🤍 Adicionar aos favoritos
-
             </FavoriteButton>
         </Container>
-
     );
-
 }

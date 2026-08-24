@@ -1,89 +1,150 @@
 import {
-    Container,
-    Thumbnails,
-    MainImage,
-    Thumbnail,
-    ThumbnailColumn,
-    ScrollButton
-} from './ProductGalleryStyles';
+  Container,
+  Thumbnails,
+  MainImage,
+  Thumbnail,
+  ThumbnailColumn,
+  ScrollButton
+} from "./ProductGalleryStyles";
 
-import { useRef, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 interface ProductGalleryProps {
-    imagens: string[],
+  imagens: string[];
+  imagemAtiva?: string | undefined;
 }
 
-export default function ProductGallery({imagens}: ProductGalleryProps) {
+export default function ProductGallery({
+  imagens,
+  imagemAtiva
+}: ProductGalleryProps) {
+  const [
+    imagemSelecionada,
+    setImagemSelecionada
+  ] = useState(0);
 
-    const [imagemSelecionada, setImagemSelecionada] = useState(0);
-    const thumbnailsRef = useRef<HTMLDivElement>(null);
-
-    function scrollParaBaixo() {
-        if (!thumbnailsRef.current) return;
-
-        thumbnailsRef.current.scrollTop += 120;
-    }
-
-    function scrollParaCima() {
-
-        thumbnailsRef.current?.scrollBy({
-
-            top: -148,
-
-            behavior: 'smooth'
-
-        });
-
-    }
-
-    return (
-        <Container>
-
-            <ThumbnailColumn>
-
-                <ScrollButton onClick={scrollParaCima}>
-
-                    ▲
-
-                </ScrollButton>
-
-                <Thumbnails ref={thumbnailsRef}>
-
-                    {imagens.map((imagem, index) => (
-
-                        <Thumbnail
-                            key={index}
-                            $selected={imagemSelecionada === index}
-                            onClick={() => setImagemSelecionada(index)}
-                        >
-                            <img
-                                src={imagem}
-                                alt={`Miniatura ${index + 1}`}
-                            />
-
-                        </Thumbnail>
-
-                    ))}
-
-                </Thumbnails>
-
-                <ScrollButton onClick={scrollParaBaixo}>
-
-                    ▼
-
-                </ScrollButton>
-
-            </ThumbnailColumn>
-
-            <MainImage>
-
-                <img
-                    src={imagens[imagemSelecionada]}
-                    alt="Imagem do produto"
-                />
-
-            </MainImage>
-
-        </Container>
+  const thumbnailsRef =
+    useRef<HTMLDivElement>(
+      null
     );
+
+  useEffect(() => {
+    if (!imagemAtiva) {
+      return;
+    }
+
+    const index =
+      imagens.indexOf(
+        imagemAtiva
+      );
+
+    if (index >= 0) {
+      setImagemSelecionada(
+        index
+      );
+    }
+  }, [
+    imagemAtiva,
+    imagens
+  ]);
+
+  function scrollParaBaixo() {
+    thumbnailsRef.current
+      ?.scrollBy({
+        top: 148,
+        behavior: "smooth"
+      });
+  }
+
+  function scrollParaCima() {
+    thumbnailsRef.current
+      ?.scrollBy({
+        top: -148,
+        behavior: "smooth"
+      });
+  }
+
+  const imagemPrincipal =
+    imagens[
+      imagemSelecionada
+    ];
+
+  return (
+    <Container>
+      <ThumbnailColumn>
+        <ScrollButton
+          type="button"
+          onClick={
+            scrollParaCima
+          }
+        >
+          ▲
+        </ScrollButton>
+
+        <Thumbnails
+          ref={
+            thumbnailsRef
+          }
+        >
+          {imagens.map(
+            (imagem, index) => (
+              <Thumbnail
+                key={
+                  `${imagem}-${index}`
+                }
+
+                $selected={
+                  imagemSelecionada ===
+                  index
+                }
+
+                onClick={() =>
+                  setImagemSelecionada(
+                    index
+                  )
+                }
+              >
+                <img
+                  src={imagem}
+                  alt={
+                    `Miniatura ${
+                      index + 1
+                    }`
+                  }
+                />
+              </Thumbnail>
+            )
+          )}
+        </Thumbnails>
+
+        <ScrollButton
+          type="button"
+          onClick={
+            scrollParaBaixo
+          }
+        >
+          ▼
+        </ScrollButton>
+      </ThumbnailColumn>
+
+      <MainImage>
+        {imagemPrincipal ? (
+          <img
+            src={
+              imagemPrincipal
+            }
+            alt="Imagem do produto"
+          />
+        ) : (
+          <span>
+            Imagem indisponível
+          </span>
+        )}
+      </MainImage>
+    </Container>
+  );
 }

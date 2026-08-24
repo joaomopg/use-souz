@@ -1,26 +1,60 @@
-import type { Produto } from "../types/Produto";
-import type { CartItem } from "../types/CartItems";
+import type {
+  ProdutoDetalheApi,
+  ProdutoVariacaoApi
+} from "../types/ProdutoDetalheApi";
 
-export function produtoToCartItem(
-    produto: Produto,
-    tamanho = "",
-    quantidade = 1
-): CartItem {
+import type {
+  CartItem
+} from "../types/CartItems";
 
-    return {
+interface ProdutoToCartItemParams {
+  produto: ProdutoDetalheApi;
 
-        id: String(produto.id),
+  variacao:
+    ProdutoVariacaoApi;
 
-        nome: produto.name,
+  quantidade: number;
 
-        preco: produto.preco,
+  imagem: string;
 
-        imagem: produto.images[0],
+  precoUnitario: number;
+}
 
-        quantidade,
+export function produtoToCartItem({
+  produto,
+  variacao,
+  quantidade,
+  imagem,
+  precoUnitario
+}: ProdutoToCartItemParams): CartItem {
+  return {
+    id:
+      `produto-${produto.id}` +
+      `-variacao-${variacao.id}`,
 
-        tamanho
+    produtoId:
+      produto.id,
 
-    };
+    produtoVariacaoId:
+      variacao.id,
 
+    sku:
+      variacao.sku,
+
+    nome:
+      produto.nome,
+
+    imagem,
+
+    preco:
+      precoUnitario,
+
+    precos:
+      variacao.precos,
+
+    quantidade,
+
+    atributos:
+      variacao.atributos
+  };
 }

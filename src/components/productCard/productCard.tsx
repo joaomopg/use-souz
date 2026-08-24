@@ -1,4 +1,30 @@
 import {
+  useEffect,
+  useMemo,
+  useState,
+  type MouseEvent
+} from "react";
+
+import {
+  useNavigate
+} from "react-router-dom";
+
+import {
+  useCart
+} from "../../contexts/shoppingCartContext";
+
+import {
+  useCartDrawer
+} from "../../contexts/cartDrawerContext";
+
+import type {
+  ProdutoVariacao
+} from "../../types/Produto";
+
+import VariationSelector
+  from "../VariationSelector/VariationSelector";
+
+import {
   Card,
   ImageContainer,
   ProductImage,
@@ -6,8 +32,6 @@ import {
   Badge,
   Content,
   ProductName,
-  SizesContainer,
-  SizeBadge,
   PriceContainer,
   OldPrice,
   CurrentPrice,
@@ -15,108 +39,261 @@ import {
   Installments,
   BuyButton,
   AddCartButton,
-  Actions,
+  Actions
 } from "./productCardStyles";
 
-import { useNavigate } from "react-router-dom";
-
 interface ProductCardProps {
-  id: number,
+  id: number;
+  slug: string;
+
   image: string[];
+
   name: string;
-  oldPrice: string;
-  currentPrice: string;
-  pixPrice: string;
-  installments: string;
-  discount?: string;
+
+  precoInicial:
+  number | null;
+
+  variacoes:
+  ProdutoVariacao[];
+
   freeShipping?: boolean;
-  sizes?: string[];
-  description?: string;
-  onAddToCart?: () => void;
+}
+
+function formatarDinheiro(
+  valor: number
+): string {
+  return new Intl.NumberFormat(
+    "pt-BR",
+    {
+      style: "currency",
+      currency: "BRL"
+    }
+  ).format(valor);
 }
 
 export default function ProductCard({
   id,
+  slug,
   image,
   name,
-  oldPrice,
-  currentPrice,
-  pixPrice,
-  installments,
-  discount,
-  freeShipping,
-  sizes = [],
-  description,
-  onAddToCart,
+  precoInicial,
+  variacoes,
+  freeShipping = false
 }: ProductCardProps) {
+  const navigate =
+    useNavigate();
 
-  const navigate = useNavigate();
+  const {
+    addItem
+  } = useCart();
+
+  const {
+    openDrawer
+  } = useCartDrawer();
+
+  const [
+    variacaoSelecionadaId,
+    setVariacaoSelecionadaId
+  ] = useState<number | null>(
+    variacoes[0]?.id ??
+    null
+  );
+
+  /*
+   * Caso os produtos sejam recarregados
+   * por um filtro, garante que a seleção
+   * continue apontando para uma variação
+   * válida.
+   */
+  useEffect(() => {
+    const selecaoAindaExiste =
+      variacoes.some(
+        (variacao) =>
+          variacao.id ===
+          variacaoSelecionadaId
+      );
+
+    if (!selecaoAindaExiste) {
+      setVariacaoSelecionadaId(
+        variacoes[0]?.id ??
+        null
+      );
+    }
+  }, [
+    variacoes,
+    variacaoSelecionadaId
+  ]);
+
+  const variacaoSelecionada =
+    useMemo(
+      () =>
+        variacoes.find(
+          (variacao) =>
+            variacao.id ===
+            variacaoSelecionadaId
+        ) ??
+        variacoes[0] ??
+        null,
+      [
+        variacoes,
+        variacaoSelecionadaId
+      ]
+    );
 
   function abrirProduto() {
-      navigate(`/produtos/${id}`);
+    navigate(
+      `/produtos/${slug}`
+    );
+  }
+
+  function adicionarAoCarrinho(
+    event:
+      MouseEvent<HTMLButtonElement>
+  ) {
+    event.stopPropagation();
+
+    if (
+      !variacaoSelecionada ||
+      variacaoSelecionada.preco ===
+      null
+    ) {
+      return;
     }
 
+    addItem({
+      id:
+        `produto-${id}` +
+        `-variacao-${variacaoSelecionada.id
+        }`,
+
+      produtoId: id,
+
+      produtoVariacaoId:
+        variacaoSelecionada.id,
+
+      sku:
+        variacaoSelecionada.sku,
+
+      nome: name,
+
+      imagem:
+        image[0] ?? "",
+
+      preco:
+        variacaoSelecionada.preco,
+
+      precos:
+        variacaoSelecionada.precos,
+
+      quantidade: 1,
+
+      atributos:
+        variacaoSelecionada
+          .atributos
+    });
+
+    openDrawer();
+  }
+
+  const imagemPrincipal =
+    image[0];
+
+  const precoExibido =
+    variacaoSelecionada
+      ?.preco ??
+    precoInicial;
+
   return (
-    <Card onClick={abrirProduto}>
+    <Card
+      onClick={abrirProduto}
+    >
       <ImageContainer>
-        <ProductImage
-          src={image[0]}
-          alt={name}
-        />
+        {imagemPrincipal ? (
+          <ProductImage
+            src={imagemPrincipal}
+            alt={name}
+            loading="lazy"
+          />
+        ) : (
+          <ProductImage
+            src="/imagem-indisponivel.webp"
+            alt="Imagem indisponível"
+            loading="lazy"
+          />
+        )}
 
         <BadgeContainer>
-          {discount && (
-            <Badge>{discount}</Badge>
-          )}
-
           {freeShipping && (
-            <Badge>FRETE GRÁTIS</Badge>
+            <Badge>
+              FRETE GRÁTIS
+            </Badge>
           )}
         </BadgeContainer>
       </ImageContainer>
 
       <Content>
+        <ProductName>
+          {name}
+        </ProductName>
 
-        <ProductName>{name}</ProductName>
+        <VariationSelector
+          variacoes={variacoes}
 
-        <SizesContainer>
-          {sizes.map((size) => (
-            <SizeBadge key={size}>
-              {size}
-            </SizeBadge>
-          ))}
-        </SizesContainer>
+          variacaoSelecionadaId={
+            variacaoSelecionada
+              ?.id ??
+            null
+          }
+
+          onSelect={
+            setVariacaoSelecionadaId
+          }
+        />
 
         <PriceContainer>
-          <OldPrice>{oldPrice}</OldPrice>
+          <PixPrice>
+            A partir de
+          </PixPrice>
 
           <CurrentPrice>
-            {currentPrice}
+            {precoExibido === null
+              ? "Preço indisponível"
+              : formatarDinheiro(
+                precoExibido
+              )}
           </CurrentPrice>
+
+          <Installments>
+            Consulte os preços por quantidade
+          </Installments>
         </PriceContainer>
 
-        <PixPrice>
-          ou {pixPrice} no Pix
-        </PixPrice>
-
-        <Installments>
-          {installments}
-        </Installments>
-
         <Actions>
+          <BuyButton
+            type="button"
 
-          <BuyButton>
-            COMPRAR
+            onClick={(event) => {
+              event.stopPropagation();
+              abrirProduto();
+            }}
+          >
+            VER DETALHES
           </BuyButton>
 
           <AddCartButton
-              onClick={(e) => {
-                  e.stopPropagation();
+            type="button"
 
-                  onAddToCart?.();
-              }}
+            disabled={
+              !variacaoSelecionada ||
+              variacaoSelecionada
+                .preco === null
+            }
+
+            onClick={
+              adicionarAoCarrinho
+            }
           >
-              🛒 Adicionar ao carrinho
+            🛒 ADICIONAR AO CARRINHO
           </AddCartButton>
         </Actions>
       </Content>

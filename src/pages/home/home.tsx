@@ -1,261 +1,353 @@
-import { ThemeProvider } from 'styled-components'
-import { theme } from '../../theme'
-import Header from '../../components/header/header'
-import image1 from '../../assets/images/imagebanner1.webp'
-import image2 from '../../assets/images/imagebanner2.webp'
-import { Body, Section, TextContainer } from './homeStyles'
-import Infos from '../../components/sectionInfos/sectionInfos'
-import BannersCarousel from '../../components/bannersCarousel/bannersCarousel'
-import Categorias from '../../components/sectionCategorias/categorias'
-import FadeSection from '../../components/ScrollRevealSections/ScrollRevealSections'
-import UseSouzCard from '../../components/useSouzCard/useSouz'
-import Carousel from '../../components/carousel/carousel'
-import reviewImage from '../../assets/images/pingentes.jpg'
-import ReviewCard from '../../components/ReviewCard/ReviewCard'
-import correnteImage from '../../assets/images/corrente2.jpg'
-import pulseiraImage from '../../assets/images/pulseiras.jpg'
-import ProductCard from '../../components/productCard/productCard'
-import atendimentoWhatsApp from '../../assets/images/banner3.png'
-import Footer from '../../components/footer/footer'
+import {
+  useEffect,
+  useState
+} from "react";
 
-function Home() {
+import {
+  useNavigate
+} from "react-router-dom";
 
-  const cards = [
-    {   
-        userName: "Wesley Silva",
-        productName: "Corrente Cart 4mm (Fecho Gaveta) + Pingente Cruz Amarrada (M)",
-        title: "Corrente pingente cruz amarrada",
-        review: "Produto condizente com o anúncio, jóia bem bonita e de bom acabamento!",
-        image: reviewImage,
-        id: 1
-    },
-    {   
-        userName: "Wesley Silva",
-        productName: "Corrente Cart 4mm (Fecho Gaveta) + Pingente Cruz Amarrada (M)",
-        title: "Corrente pingente cruz amarrada",
-        review: "Produto condizente com o anúncio, jóia bem bonita e de bom acabamento!",
-        image: reviewImage,
-        id: 2
-    },
-    {   
-        userName: "Wesley Silva",
-        productName: "Corrente Cart 4mm (Fecho Gaveta) + Pingente Cruz Amarrada (M)",
-        title: "Corrente pingente cruz amarrada",
-        review: "Produto condizente com o anúncio, jóia bem bonita e de bom acabamento!",
-        image: reviewImage,
-        id: 3
-    },
-    {   
-        userName: "Wesley Silva",
-        productName: "Corrente Cart 4mm (Fecho Gaveta) + Pingente Cruz Amarrada (M)",
-        title: "Corrente pingente cruz amarrada",
-        review: "Produto condizente com o anúncio, jóia bem bonita e de bom acabamento!",
-        image: reviewImage,
-        id: 4
-    },
-    {   
-        userName: "Wesley Silva",
-        productName: "Corrente Cart 4mm (Fecho Gaveta) + Pingente Cruz Amarrada (M)",
-        title: "Corrente pingente cruz amarrada",
-        review: "Produto condizente com o anúncio, jóia bem bonita e de bom acabamento!",
-        image: reviewImage,
-        id: 5
-    },
-  
-];
+import Header
+  from "../../components/header/header";
 
-  const products = [
-    {
-      id: 1,
-      image: correnteImage,
-      name: "Kit Completo - Piastrine 1,5mm + Pingente Cruz",
-      oldPrice: "R$300,00",
-      currentPrice: "R$159,90",
-      pixPrice: "R$151,91 com Pix",
-      installments: "10x de R$15,99 sem juros",
-      discount: "47% OFF",
-      freeShipping: true,
-      sizes: ["19cm", "20cm", "21cm", "+2"],
-    },
-    {
-      id: 2,
-      image: pulseiraImage,
-      name: "Pulseira Grumet 5mm",
-      oldPrice: "R$199,90",
-      currentPrice: "R$99,90",
-      pixPrice: "R$94,90 com Pix",
-      installments: "10x de R$9,99 sem juros",
-      discount: "50% OFF",
-      freeShipping: true,
-      sizes: ["18cm", "19cm", "20cm"],
-    },
-    {
-      id: 3,
-      image: correnteImage,
-      name: "Kit Completo - Piastrine 1,5mm + Pingente Cruz",
-      oldPrice: "R$300,00",
-      currentPrice: "R$159,90",
-      pixPrice: "R$151,91 com Pix",
-      installments: "10x de R$15,99 sem juros",
-      discount: "47% OFF",
-      freeShipping: true,
-      sizes: ["19cm", "20cm", "21cm", "+2"],
-    },
-    {
-      id: 4,
-      image: pulseiraImage,
-      name: "Pulseira Grumet 5mm",
-      oldPrice: "R$199,90",
-      currentPrice: "R$99,90",
-      pixPrice: "R$94,90 com Pix",
-      installments: "10x de R$9,99 sem juros",
-      discount: "50% OFF",
-      freeShipping: true,
-      sizes: ["18cm", "19cm", "20cm"],
-    },
-    {
-      id: 5,
-      image: correnteImage,
-      name: "Kit Completo - Piastrine 1,5mm + Pingente Cruz",
-      oldPrice: "R$300,00",
-      currentPrice: "R$159,90",
-      pixPrice: "R$151,91 com Pix",
-      installments: "10x de R$15,99 sem juros",
-      discount: "47% OFF",
-      freeShipping: true,
-      sizes: ["19cm", "20cm", "21cm", "+2"],
-    },
-    {
-      id: 6,
-      image: pulseiraImage,
-      name: "Pulseira Grumet 5mm",
-      oldPrice: "R$199,90",
-      currentPrice: "R$99,90",
-      pixPrice: "R$94,90 com Pix",
-      installments: "10x de R$9,99 sem juros",
-      discount: "50% OFF",
-      freeShipping: true,
-      sizes: ["18cm", "19cm", "20cm"],
-    },
-  ];
-  
-  return (
-    <ThemeProvider theme={theme}>
-      <div style={{display: "flex", flexDirection: "column", backgroundColor: "black"}}>
+import Infos
+  from "../../components/sectionInfos/sectionInfos";
 
-        <Header/>
-        <Body>
-          <BannersCarousel
-          images={[
-            image1,
-            image2,
-          ]}
-          />
-          <Infos/>
-          <Categorias/>
-          <Section>
-            <div className="useSouzContainer">
-              <UseSouzCard/>
-            </div>
-          </Section>
-          
-          <FadeSection background='black'>
-              <div style={{display: "flex", flexDirection: "column"}}>
-                <TextContainer>AVALIAÇÕES</TextContainer>
-                <Carousel
-                  cardsPerView={3}
-                  gap={20}
-                  >
-                  {cards.map(card => (
-                    <ReviewCard
-                      key={card.id}
-                      {...card}
-                    />
-                  ))}
-                </Carousel>
+import BannersCarousel
+  from "../../components/bannersCarousel/bannersCarousel";
 
-              </div>
-          </FadeSection>
+import Categorias
+  from "../../components/sectionCategorias/categorias";
 
-          <Section>
-            <div style={{display: "flex", flexDirection: "column"}}>
-            <TextContainer>MAIS VENDIDOS</TextContainer>
-            <Carousel
-              cardsPerView={4}
-              gap={20}
-              >
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  image={product.image}
-                  name={product.name}
-                  oldPrice={product.oldPrice}
-                  currentPrice={product.currentPrice}
-                  pixPrice={product.pixPrice}
-                  installments={product.installments}
-                  discount={product.discount}
-                  freeShipping={product.freeShipping}
-                  sizes={product.sizes}
-                />
-              ))}
-            </Carousel>
-            </div>
-          </Section>
+import FadeSection
+  from "../../components/ScrollRevealSections/ScrollRevealSections";
 
-          <FadeSection background='black'>
-            <div
-              style={{
-                width: "100%",
-                border: "1px solid #c49d54",
-                borderRadius: "12px",
-                overflow: "hidden",
-                boxShadow: "0 0 20px rgba(196,157,84,0.25)",
-              }}
-            >
-              <img
-                src={atendimentoWhatsApp}
-                alt="Atendimento WhatsApp"
-                style={{
-                  width: "100%",
-                  display: "block",
-                  objectFit: "contain",
-                }}
-              />
-            </div>
-          </FadeSection>
+import UseSouzCard
+  from "../../components/useSouzCard/useSouz";
 
-          <Section>
-            <div style={{display: "flex", flexDirection: "column"}}>
-            <TextContainer>LANÇAMENTOS</TextContainer>
-            <Carousel
-              cardsPerView={4}
-              gap={20}
-              >
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  image={product.image}
-                  name={product.name}
-                  oldPrice={product.oldPrice}
-                  currentPrice={product.currentPrice}
-                  pixPrice={product.pixPrice}
-                  installments={product.installments}
-                  discount={product.discount}
-                  freeShipping={product.freeShipping}
-                  sizes={product.sizes}
-                />
-              ))}
-            </Carousel>
-            </div>
-          </Section>
+import Carousel
+  from "../../components/carousel/carousel";
 
-          
-        </Body>
+import ProductCard
+  from "../../components/productCard/productCard";
 
-        <Footer/>
-      </div>
-    </ThemeProvider>
-  )
+import Footer
+  from "../../components/footer/footer";
+
+import Loader
+  from "../../components/Loader/Loader";
+
+import {
+  getProdutos
+} from "../../services/produto.service";
+
+import {
+  transformarProduto
+} from "../../utils/transformarProduto";
+
+import type {
+  Produto
+} from "../../types/Produto";
+
+import image1
+  from "../../assets/images/bannernovo1.png";
+
+import image2
+  from "../../assets/images/bannernovo2.png";
+
+import atendimentoWhatsApp
+  from "../../assets/images/banner3.png";
+
+import {
+  Body,
+  EmptyMessage,
+  InstitutionalSection,
+  LoadingContainer,
+  Page,
+  Section,
+  SectionContent,
+  SectionHeader,
+  TextContainer,
+  UseSouzContainer,
+  ViewAllButton,
+  WhatsAppContainer
+} from "./homeStyles";
+
+interface HomeProductGroup {
+  slug: string;
+  titulo: string;
+  produtos: Produto[];
 }
 
-export default Home;
+const categoriasHome = [
+  {
+    slug: "correntes",
+    titulo: "Correntes"
+  },
+  {
+    slug: "pulseiras",
+    titulo: "Pulseiras"
+  },
+  {
+    slug: "pingentes",
+    titulo: "Pingentes"
+  },
+  {
+    slug: "brincos",
+    titulo: "Brincos"
+  }
+];
+
+export default function Home() {
+  const navigate =
+    useNavigate();
+
+  const [
+    grupos,
+    setGrupos
+  ] = useState<
+    HomeProductGroup[]
+  >([]);
+
+  const [
+    loading,
+    setLoading
+  ] = useState(true);
+
+  useEffect(() => {
+    void carregarProdutos();
+  }, []);
+
+  async function carregarProdutos() {
+    try {
+      setLoading(true);
+
+      const resultados =
+        await Promise.all(
+          categoriasHome.map(
+            async (
+              categoria
+            ) => {
+              const produtosApi =
+                await getProdutos({
+                  category:
+                    categoria.slug
+                });
+
+              return {
+                slug:
+                  categoria.slug,
+
+                titulo:
+                  categoria.titulo,
+
+                /*
+                 * Por enquanto buscamos usando
+                 * o serviço existente e mostramos
+                 * apenas os oito primeiros.
+                 *
+                 * Depois podemos otimizar a API
+                 * para a Home buscar apenas 8.
+                 */
+                produtos:
+                  produtosApi
+                    .slice(0, 8)
+                    .map(
+                      transformarProduto
+                    )
+              };
+            }
+          )
+        );
+
+      setGrupos(
+        resultados
+      );
+    } catch (error) {
+      console.error(
+        "Erro ao carregar produtos da Home:",
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function abrirCategoria(
+    slug: string
+  ) {
+    navigate(
+      `/produtos?category=${slug}`
+    );
+  }
+
+  return (
+    <Page>
+      <Header />
+
+      <Body>
+        <BannersCarousel
+          images={[
+            image1,
+            image2
+          ]}
+        />
+
+        <Infos />
+
+        <Categorias />
+
+        {loading ? (
+          <LoadingContainer>
+            <Loader />
+          </LoadingContainer>
+        ) : (
+          grupos.map(
+            (
+              grupo,
+              index
+            ) => {
+              const conteudo = (
+                <Section>
+                  <SectionContent>
+                    <SectionHeader>
+                      <TextContainer>
+                        {grupo.titulo}
+                      </TextContainer>
+
+                      <ViewAllButton
+                        type="button"
+                        onClick={() =>
+                          abrirCategoria(
+                            grupo.slug
+                          )
+                        }
+                      >
+                        Ver todos →
+                      </ViewAllButton>
+                    </SectionHeader>
+
+                    {grupo.produtos
+                      .length ===
+                    0 ? (
+                      <EmptyMessage>
+                        Nenhum produto
+                        disponível.
+                      </EmptyMessage>
+                    ) : (
+                      <Carousel
+                        cardsPerView={
+                          4
+                        }
+                        gap={20}
+                      >
+                        {grupo.produtos.map(
+                          (
+                            product
+                          ) => (
+                            <ProductCard
+                              key={
+                                product.id
+                              }
+
+                              id={
+                                product.id
+                              }
+
+                              slug={
+                                product.slug
+                              }
+
+                              image={
+                                product.images
+                              }
+
+                              name={
+                                product.name
+                              }
+
+                              precoInicial={
+                                product.preco
+                              }
+
+                              variacoes={
+                                product.variacoes
+                              }
+
+                              freeShipping={
+                                product
+                                  .freeShipping
+                              }
+                            />
+                          )
+                        )}
+                      </Carousel>
+                    )}
+                  </SectionContent>
+                </Section>
+              );
+
+              /*
+               * Alternamos o FadeSection
+               * para não deixar todas as
+               * sections com exatamente
+               * o mesmo movimento.
+               */
+              if (
+                index % 2 === 1
+              ) {
+                return (
+                  <FadeSection
+                    key={
+                      grupo.slug
+                    }
+                    background="black"
+                  >
+                    {conteudo}
+                  </FadeSection>
+                );
+              }
+
+              return (
+                <div
+                  key={
+                    grupo.slug
+                  }
+                >
+                  {conteudo}
+                </div>
+              );
+            }
+          )
+        )}
+
+        <FadeSection
+          background="black"
+        >
+          <InstitutionalSection>
+            <UseSouzContainer>
+              <UseSouzCard />
+            </UseSouzContainer>
+          </InstitutionalSection>
+        </FadeSection>
+
+        <FadeSection
+          background="black"
+        >
+          <InstitutionalSection>
+            <WhatsAppContainer>
+              <img
+                src={
+                  atendimentoWhatsApp
+                }
+                alt="Atendimento pelo WhatsApp"
+              />
+            </WhatsAppContainer>
+          </InstitutionalSection>
+        </FadeSection>
+      </Body>
+
+      <Footer />
+    </Page>
+  );
+}

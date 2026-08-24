@@ -1,116 +1,204 @@
-import { useCart, type CartItem as CartItemType } from '../../contexts/shoppingCartContext'
-import TrashIcon from '../Icons/TrashIcon';
-import {Container, ImageContainer, Content, ProductActions, ProductName, ProductInfo, ProductSize, ProductPrice, QuantityContainer, QuantityButton, Quantity, RemoveButton} from './cartItemStyles'
+import {
+    useCart
+} from "../../contexts/shoppingCartContext";
+
+import type {
+    CartItem as CartItemType
+} from "../../types/CartItems";
+
+import TrashIcon from "../Icons/TrashIcon";
+
+import {
+    Container,
+    ImageContainer,
+    Content,
+    ProductActions,
+    ProductName,
+    ProductInfo,
+    ProductSize,
+    ProductPrice,
+    QuantityContainer,
+    QuantityButton,
+    Quantity,
+    RemoveButton
+} from "./cartItemStyles";
+
+import {
+    calcularPrecoCarrinho
+} from "../../utils/calcularPrecoCarrinho";
 
 interface CartItemProps {
     item: CartItemType;
 }
 
-export function CartItem({item}: CartItemProps) {
+function formatarDinheiro(
+    valor: number
+): string {
+    return new Intl.NumberFormat(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    ).format(valor);
+}
 
-    const { updateQuantity, removeItem } = useCart();
+function formatarNomeAtributo(
+    atributo: string
+): string {
+    return atributo
+        .replace(/_/g, " ")
+        .replace(
+            /^./,
+            (letra) =>
+                letra.toUpperCase()
+        );
+}
+
+export function CartItem({
+    item
+}: CartItemProps) {
+    const {
+        updateQuantity,
+        removeItem
+    } = useCart();
 
     function aumentarQuantidade() {
         updateQuantity(
             item.id,
-            item.quantidade + 1,
-            item.tamanho
+            item.quantidade + 1
         );
     }
 
     function diminuirQuantidade() {
-
         if (item.quantidade === 1) {
             return;
         }
 
         updateQuantity(
             item.id,
-            item.quantidade - 1,
-            item.tamanho
+            item.quantidade - 1
         );
     }
 
     function removerProduto() {
-        removeItem(
-            item.id,
-            item.tamanho
-        );
+        removeItem(item.id);
     }
+
+    const atributos =
+        Object.entries(
+            item.atributos ?? {}
+        );
+
+    const precoTotal =
+        calcularPrecoCarrinho(
+            item.precos,
+            item.quantidade
+        );
 
     return (
         <Container>
-
             <ImageContainer>
-
-                <img
-                    src={item.imagem}
-                    alt={item.nome}
-                />
-
+                {item.imagem ? (
+                    <img
+                        src={item.imagem}
+                        alt={item.nome}
+                    />
+                ) : (
+                    <span>
+                        Sem imagem
+                    </span>
+                )}
             </ImageContainer>
 
             <Content>
-
                 <ProductInfo>
-
                     <ProductName>
-
                         {item.nome}
-
                     </ProductName>
 
-                    <ProductSize>
+                    {atributos.length > 0 && (
+                        <ProductSize>
+                            {atributos.map(
+                                (
+                                    [
+                                        nomeAtributo,
+                                        valor
+                                    ],
+                                    index
+                                ) => (
+                                    <span
+                                        key={
+                                            nomeAtributo
+                                        }
+                                    >
+                                        {formatarNomeAtributo(
+                                            nomeAtributo
+                                        )}
+                                        : {valor}
 
-                        Tamanho: {item.tamanho}
-
-                    </ProductSize>
+                                        {index <
+                                            atributos.length -
+                                            1 && (
+                                                <>
+                                                    {" • "}
+                                                </>
+                                            )}
+                                    </span>
+                                )
+                            )}
+                        </ProductSize>
+                    )}
 
                     <ProductPrice>
-
-                        R$ {item.preco}
-
+                        {formatarDinheiro(
+                            precoTotal
+                        )}
                     </ProductPrice>
-
                 </ProductInfo>
 
                 <ProductActions>
-
                     <QuantityContainer>
-
-                        <QuantityButton 
-                        onClick={diminuirQuantidade}
-                        $disabled={item.quantidade === 1}
+                        <QuantityButton
+                            type="button"
+                            onClick={
+                                diminuirQuantidade
+                            }
+                            $disabled={
+                                item.quantidade === 1
+                            }
+                            disabled={
+                                item.quantidade === 1
+                            }
                         >
-                            
-                            -
-
+                            −
                         </QuantityButton>
 
                         <Quantity>
-
                             {item.quantidade}
-
                         </Quantity>
 
-                        <QuantityButton onClick={aumentarQuantidade}>
-
+                        <QuantityButton
+                            type="button"
+                            onClick={
+                                aumentarQuantidade
+                            }
+                        >
                             +
-
                         </QuantityButton>
-
                     </QuantityContainer>
 
-                    <RemoveButton onClick={removerProduto}>
-
+                    <RemoveButton
+                        type="button"
+                        onClick={
+                            removerProduto
+                        }
+                        aria-label={`Remover ${item.nome} do carrinho`}
+                    >
                         <TrashIcon />
-
                     </RemoveButton>
-
                 </ProductActions>
-
             </Content>
-
         </Container>
-    )
+    );
 }

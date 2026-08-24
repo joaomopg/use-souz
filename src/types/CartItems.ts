@@ -1,15 +1,31 @@
+export interface CartItemPrice {
+  quantidade: number;
+  precoTotal: number;
+}
+
 export interface CartItem {
+  id: string;
 
-    id: string;
+  produtoId: number;
+  produtoVariacaoId: number;
 
-    nome: string;
+  sku: string;
 
-    imagem: string;
+  nome: string;
+  imagem: string;
 
-    preco: number;
+  /**
+   * Preço unitário da faixa de 1 unidade.
+   * Mantemos para compatibilidade.
+   */
+  preco: number;
 
-    quantidade: number;
+  precos: CartItemPrice[];
 
-    tamanho: string;
+  quantidade: number;
 
+  atributos: Record<
+    string,
+    string
+  >;
 }

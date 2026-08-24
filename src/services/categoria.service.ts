@@ -1,10 +1,15 @@
 import { api } from "./api";
 
+import type {
+  Categoria
+} from "../types/Categoria";
 
-export async function getCategorias() {
-    const response = await api.get(
-        '/produtos/categorias'
+export async function getCategorias():
+Promise<Categoria[]> {
+  const response =
+    await api.get<Categoria[]>(
+      "/categories"
     );
-    
-    return response.data;
+
+  return response.data;
 }

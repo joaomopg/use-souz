@@ -1,71 +1,215 @@
-import { createContext, useState, useEffect, type ReactNode, useContext } from 'react';
-import { useToast } from "./ToastContext";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode
+} from "react";
 
-export interface CartItem {
-  id: string;
-  nome: string;
-  preco: number;
-  imagem: string;
-  quantidade: number;
-  tamanho: string
-}
+import {
+  useToast
+} from "./ToastContext";
+
+import type {
+  CartItem
+} from "../types/CartItems";
+
+import {
+  calcularPrecoCarrinho
+} from "../utils/calcularPrecoCarrinho";
 
 interface CartContextData {
   items: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string, tamanho: string) => void;
-  updateQuantity: (id: string, quantidade: number, tamanho: string) => void;
+
+  addItem: (
+    item: CartItem
+  ) => void;
+
+  removeItem: (
+    id: string
+  ) => void;
+
+  updateQuantity: (
+    id: string,
+    quantidade: number
+  ) => void;
+
   clearCart: () => void;
+
   total: number;
   totalItems: number;
 }
 
-export const CartContext = createContext<CartContextData>({} as CartContextData);
+export const CartContext =
+  createContext<CartContextData>(
+    {} as CartContextData
+  );
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({
+  children
+}: {
+  children: ReactNode;
+}) {
+  const [items, setItems] =
+  useState<CartItem[]>(() => {
+    const stored =
+      localStorage.getItem(
+        "@use-souz:cart"
+      );
 
-  const [items, setItems] = useState<CartItem[]>(() => {
-    const stored = localStorage.getItem('@use-souz:cart');
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) {
+      return [];
+    }
+
+    try {
+      const parsed =
+        JSON.parse(stored) as CartItem[];
+
+      return parsed.filter(
+        (item) =>
+          typeof item.id === "string" &&
+          typeof item.produtoId === "number" &&
+          typeof item.produtoVariacaoId === "number" &&
+          typeof item.sku === "string" &&
+          typeof item.nome === "string" &&
+          typeof item.preco === "number" &&
+          typeof item.quantidade === "number" &&
+          item.atributos !== null &&
+          typeof item.atributos === "object"
+      );
+    } catch {
+      localStorage.removeItem(
+        "@use-souz:cart"
+      );
+
+      return [];
+    }
   });
 
-  const { showToast } = useToast();
+  const { showToast } =
+    useToast();
 
   useEffect(() => {
-    localStorage.setItem('@use-souz:cart', JSON.stringify(items));
+    localStorage.setItem(
+      "@use-souz:cart",
+      JSON.stringify(items)
+    );
   }, [items]);
 
-  const addItem = (item: CartItem) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id && i.tamanho === item.tamanho); //verifica se o item adicionado ao carrinho já existia no carrinho antes
-      if (existing) {
-        return prev.map((i) =>
-          i.id === item.id && i.tamanho === item.tamanho? { ...i, quantidade: i.quantidade + item.quantidade } : i
+  function addItem(
+    item: CartItem
+  ) {
+    setItems((previousItems) => {
+      const existingItem =
+        previousItems.find(
+          (currentItem) =>
+            currentItem.id === item.id
+        );
+
+      if (existingItem) {
+        return previousItems.map(
+          (currentItem) =>
+            currentItem.id === item.id
+              ? {
+                  ...currentItem,
+
+                  quantidade:
+                    currentItem
+                      .quantidade +
+                    item.quantidade
+                }
+              : currentItem
         );
       }
-      return [...prev, item];
+
+      return [
+        ...previousItems,
+        item
+      ];
     });
-    showToast("Produto adicionado ao carrinho.");
-  };
 
-  const removeItem = (id: string, tamanho: string) => setItems((prev) => prev.filter((i) => i.id !== id || i.tamanho !== tamanho));
+    showToast(
+      "Produto adicionado ao carrinho."
+    );
+  }
 
-  const updateQuantity = (id: string, quantidade: number, tamanho: string) =>
-    setItems((prev) => prev.map((i) => (i.id === id && i.tamanho === tamanho? { ...i, quantidade } : i)));
+  function removeItem(
+    id: string
+  ) {
+    setItems(
+      (previousItems) =>
+        previousItems.filter(
+          (item) =>
+            item.id !== id
+        )
+    );
+  }
 
-  const clearCart = () => setItems([]);
+  function updateQuantity(
+    id: string,
+    quantidade: number
+  ) {
+    if (quantidade <= 0) {
+      removeItem(id);
+      return;
+    }
 
-  const total = items.reduce((sum, item) => sum + item.preco * item.quantidade, 0);
+    setItems(
+      (previousItems) =>
+        previousItems.map(
+          (item) =>
+            item.id === id
+              ? {
+                  ...item,
+                  quantidade
+                }
+              : item
+        )
+    );
+  }
 
-  const totalItems = items.reduce((acumulador, i)=> acumulador + i.quantidade, 0)
+  function clearCart() {
+    setItems([]);
+  }
+
+  const total =
+  items.reduce(
+    (sum, item) =>
+      sum +
+      calcularPrecoCarrinho(
+        item.precos,
+        item.quantidade
+      ),
+    0
+  );
+
+  const totalItems =
+    items.reduce(
+      (sum, item) =>
+        sum +
+        item.quantidade,
+      0
+    );
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, totalItems }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        total,
+        totalItems
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 }
 
 export function useCart() {
-  return useContext(CartContext);
+  return useContext(
+    CartContext
+  );
 }
