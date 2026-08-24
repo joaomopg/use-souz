@@ -33,7 +33,6 @@ import {
   Content,
   ProductName,
   PriceContainer,
-  OldPrice,
   CurrentPrice,
   PixPrice,
   Installments,

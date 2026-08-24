@@ -4,14 +4,33 @@ import {
 } from "react-router-dom";
 
 import Home from "./pages/home/home";
+
 import Catalogo from "./pages/catalogo/catalogo";
-import ProdutoDetalhe from "./pages/ProdutoDetalhe/produtoDetalhe";
-import Checkout from "./pages/checkout/Checkout";
-import OrderSuccess from "./pages/OrderSuccess/OrderSuccess";
+
+import ProdutoDetalhe
+  from "./pages/ProdutoDetalhe/produtoDetalhe";
+
+import Checkout
+  from "./pages/checkout/Checkout";
+
+import OrderSuccess
+  from "./pages/OrderSuccess/OrderSuccess";
+
+import {
+  Register
+} from "./pages/Register/Register";
+
+import {
+  Login
+} from "./pages/Login/Login";
+
 
 function AppRoutes() {
+
   return (
+
     <Routes>
+
       <Route
         path="/"
         element={<Home />}
@@ -36,10 +55,21 @@ function AppRoutes() {
         path="/pedido/:codigo/sucesso"
         element={<OrderSuccess />}
       />
+
+      <Route
+        path="/register"
+        element={<Register />}
+      />
+
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+
     </Routes>
 
-
   );
+
 }
 
 export default AppRoutes;

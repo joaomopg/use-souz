@@ -25,8 +25,6 @@ export default function Carousel({
   ? children
   : [children];
 
-  const totalItems = items.length;
-
   const cardWidthPercent = 100 / cardsPerView;
 
   const maxIndex = Math.max(

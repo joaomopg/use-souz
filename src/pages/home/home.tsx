@@ -1,353 +1,458 @@
 import {
-  useEffect,
-  useState
+    useEffect,
+    useState
 } from "react";
 
 import {
-  useNavigate
+    useNavigate
 } from "react-router-dom";
 
 import Header
-  from "../../components/header/header";
+    from "../../components/header/header";
 
 import Infos
-  from "../../components/sectionInfos/sectionInfos";
+    from "../../components/sectionInfos/sectionInfos";
 
 import BannersCarousel
-  from "../../components/bannersCarousel/bannersCarousel";
+    from "../../components/bannersCarousel/bannersCarousel";
 
 import Categorias
-  from "../../components/sectionCategorias/categorias";
+    from "../../components/sectionCategorias/categorias";
 
 import FadeSection
-  from "../../components/ScrollRevealSections/ScrollRevealSections";
+    from "../../components/ScrollRevealSections/ScrollRevealSections";
 
 import UseSouzCard
-  from "../../components/useSouzCard/useSouz";
+    from "../../components/useSouzCard/useSouz";
 
 import Carousel
-  from "../../components/carousel/carousel";
+    from "../../components/carousel/carousel";
 
 import ProductCard
-  from "../../components/productCard/productCard";
+    from "../../components/productCard/productCard";
 
 import Footer
-  from "../../components/footer/footer";
+    from "../../components/footer/footer";
 
 import Loader
-  from "../../components/Loader/Loader";
+    from "../../components/Loader/Loader";
 
 import {
-  getProdutos
+    getProdutos
 } from "../../services/produto.service";
 
 import {
-  transformarProduto
+    transformarProduto
 } from "../../utils/transformarProduto";
 
 import type {
-  Produto
+    Produto
 } from "../../types/Produto";
 
 import image1
-  from "../../assets/images/bannernovo1.png";
+    from "../../assets/images/bannernovo1.png";
 
 import image2
-  from "../../assets/images/bannernovo2.png";
+    from "../../assets/images/bannernovo2.png";
 
 import atendimentoWhatsApp
-  from "../../assets/images/banner3.png";
+    from "../../assets/images/banner3.png";
 
 import {
-  Body,
-  EmptyMessage,
-  InstitutionalSection,
-  LoadingContainer,
-  Page,
-  Section,
-  SectionContent,
-  SectionHeader,
-  TextContainer,
-  UseSouzContainer,
-  ViewAllButton,
-  WhatsAppContainer
+    Body,
+    EmptyMessage,
+    InstitutionalSection,
+    LoadingContainer,
+    Page,
+    Section,
+    SectionContent,
+    SectionHeader,
+    TextContainer,
+    UseSouzContainer,
+    ViewAllButton,
+    WhatsAppContainer
 } from "./homeStyles";
 
+
 interface HomeProductGroup {
-  slug: string;
-  titulo: string;
-  produtos: Produto[];
+    slug: string;
+    titulo: string;
+    produtos: Produto[];
 }
 
+
 const categoriasHome = [
-  {
-    slug: "correntes",
-    titulo: "Correntes"
-  },
-  {
-    slug: "pulseiras",
-    titulo: "Pulseiras"
-  },
-  {
-    slug: "pingentes",
-    titulo: "Pingentes"
-  },
-  {
-    slug: "brincos",
-    titulo: "Brincos"
-  }
+    {
+        slug: "correntes",
+        titulo: "Correntes"
+    },
+    {
+        slug: "pulseiras",
+        titulo: "Pulseiras"
+    },
+    {
+        slug: "pingentes",
+        titulo: "Pingentes"
+    },
+    {
+        slug: "brincos",
+        titulo: "Brincos"
+    }
 ];
 
+
 export default function Home() {
-  const navigate =
-    useNavigate();
 
-  const [
-    grupos,
-    setGrupos
-  ] = useState<
-    HomeProductGroup[]
-  >([]);
+    const navigate =
+        useNavigate();
 
-  const [
-    loading,
-    setLoading
-  ] = useState(true);
 
-  useEffect(() => {
-    void carregarProdutos();
-  }, []);
+    const [
+        grupos,
+        setGrupos
+    ] = useState<HomeProductGroup[]>(
+        []
+    );
 
-  async function carregarProdutos() {
-    try {
-      setLoading(true);
 
-      const resultados =
-        await Promise.all(
-          categoriasHome.map(
-            async (
-              categoria
-            ) => {
-              const produtosApi =
-                await getProdutos({
-                  category:
-                    categoria.slug
-                });
+    const [
+        loading,
+        setLoading
+    ] = useState(true);
 
-              return {
-                slug:
-                  categoria.slug,
 
-                titulo:
-                  categoria.titulo,
+    useEffect(() => {
 
-                /*
-                 * Por enquanto buscamos usando
-                 * o serviço existente e mostramos
-                 * apenas os oito primeiros.
-                 *
-                 * Depois podemos otimizar a API
-                 * para a Home buscar apenas 8.
-                 */
-                produtos:
-                  produtosApi
-                    .slice(0, 8)
-                    .map(
-                      transformarProduto
+        void carregarProdutos();
+
+    }, []);
+
+
+    async function carregarProdutos() {
+
+        try {
+
+            setLoading(
+                true
+            );
+
+
+            const resultados =
+                await Promise.all(
+
+                    categoriasHome.map(
+                        async (
+                            categoria
+                        ) => {
+
+                            const produtosApi =
+                                await getProdutos({
+                                    category:
+                                        categoria.slug
+                                });
+
+
+                            return {
+
+                                slug:
+                                    categoria.slug,
+
+                                titulo:
+                                    categoria.titulo,
+
+                                produtos:
+                                    produtosApi
+                                        .slice(
+                                            0,
+                                            8
+                                        )
+                                        .map(
+                                            transformarProduto
+                                        )
+
+                            };
+
+                        }
                     )
-              };
-            }
-          )
+
+                );
+
+
+            setGrupos(
+                resultados
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao carregar produtos da Home:",
+                error
+            );
+
+        } finally {
+
+            setLoading(
+                false
+            );
+
+        }
+
+    }
+
+
+    function abrirCategoria(
+        slug: string
+    ) {
+
+        navigate(
+            `/produtos?category=${slug}`
         );
 
-      setGrupos(
-        resultados
-      );
-    } catch (error) {
-      console.error(
-        "Erro ao carregar produtos da Home:",
-        error
-      );
-    } finally {
-      setLoading(false);
     }
-  }
 
-  function abrirCategoria(
-    slug: string
-  ) {
-    navigate(
-      `/produtos?category=${slug}`
-    );
-  }
 
-  return (
-    <Page>
-      <Header />
+    return (
 
-      <Body>
-        <BannersCarousel
-          images={[
-            image1,
-            image2
-          ]}
-        />
+        <Page>
 
-        <Infos />
+            <Header />
 
-        <Categorias />
 
-        {loading ? (
-          <LoadingContainer>
-            <Loader />
-          </LoadingContainer>
-        ) : (
-          grupos.map(
-            (
-              grupo,
-              index
-            ) => {
-              const conteudo = (
-                <Section>
-                  <SectionContent>
-                    <SectionHeader>
-                      <TextContainer>
-                        {grupo.titulo}
-                      </TextContainer>
+            <Body>
 
-                      <ViewAllButton
-                        type="button"
-                        onClick={() =>
-                          abrirCategoria(
-                            grupo.slug
-                          )
+                <BannersCarousel
+                    images={[
+                        image1,
+                        image2
+                    ]}
+                />
+
+
+                <Infos />
+
+
+                <Categorias />
+
+
+                {loading ? (
+
+                    <LoadingContainer>
+
+                        <Loader />
+
+                    </LoadingContainer>
+
+                ) : (
+
+                    grupos.map(
+                        (
+                            grupo,
+                            index
+                        ) => {
+
+                            const conteudo = (
+
+                                <Section>
+
+                                    <SectionContent>
+
+                                        <SectionHeader>
+
+                                            <TextContainer>
+
+                                                {
+                                                    grupo.titulo
+                                                }
+
+                                            </TextContainer>
+
+
+                                            <ViewAllButton
+                                                type="button"
+
+                                                onClick={() =>
+                                                    abrirCategoria(
+                                                        grupo.slug
+                                                    )
+                                                }
+                                            >
+
+                                                Ver todos →
+
+                                            </ViewAllButton>
+
+                                        </SectionHeader>
+
+
+                                        {grupo.produtos
+                                            .length ===
+                                        0 ? (
+
+                                            <EmptyMessage>
+
+                                                Nenhum produto
+                                                disponível.
+
+                                            </EmptyMessage>
+
+                                        ) : (
+
+                                            <Carousel
+                                                cardsPerView={
+                                                    4
+                                                }
+                                                gap={
+                                                    20
+                                                }
+                                            >
+
+                                                {grupo.produtos.map(
+                                                    (
+                                                        product
+                                                    ) => (
+
+                                                        <ProductCard
+                                                            key={
+                                                                product.id
+                                                            }
+
+                                                            id={
+                                                                product.id
+                                                            }
+
+                                                            slug={
+                                                                product.slug
+                                                            }
+
+                                                            image={
+                                                                product.images
+                                                            }
+
+                                                            name={
+                                                                product.name
+                                                            }
+
+                                                            precoInicial={
+                                                                product.preco
+                                                            }
+
+                                                            variacoes={
+                                                                product.variacoes
+                                                            }
+
+                                                            freeShipping={
+                                                                product
+                                                                    .freeShipping
+                                                            }
+                                                        />
+
+                                                    )
+                                                )}
+
+                                            </Carousel>
+
+                                        )}
+
+                                    </SectionContent>
+
+                                </Section>
+
+                            );
+
+
+                            if (
+                                index % 2 === 1
+                            ) {
+
+                                return (
+
+                                    <FadeSection
+                                        key={
+                                            grupo.slug
+                                        }
+                                        background="black"
+                                    >
+
+                                        {
+                                            conteudo
+                                        }
+
+                                    </FadeSection>
+
+                                );
+
+                            }
+
+
+                            return (
+
+                                <div
+                                    key={
+                                        grupo.slug
+                                    }
+                                >
+
+                                    {
+                                        conteudo
+                                    }
+
+                                </div>
+
+                            );
+
                         }
-                      >
-                        Ver todos →
-                      </ViewAllButton>
-                    </SectionHeader>
+                    )
 
-                    {grupo.produtos
-                      .length ===
-                    0 ? (
-                      <EmptyMessage>
-                        Nenhum produto
-                        disponível.
-                      </EmptyMessage>
-                    ) : (
-                      <Carousel
-                        cardsPerView={
-                          4
-                        }
-                        gap={20}
-                      >
-                        {grupo.produtos.map(
-                          (
-                            product
-                          ) => (
-                            <ProductCard
-                              key={
-                                product.id
-                              }
+                )}
 
-                              id={
-                                product.id
-                              }
 
-                              slug={
-                                product.slug
-                              }
-
-                              image={
-                                product.images
-                              }
-
-                              name={
-                                product.name
-                              }
-
-                              precoInicial={
-                                product.preco
-                              }
-
-                              variacoes={
-                                product.variacoes
-                              }
-
-                              freeShipping={
-                                product
-                                  .freeShipping
-                              }
-                            />
-                          )
-                        )}
-                      </Carousel>
-                    )}
-                  </SectionContent>
-                </Section>
-              );
-
-              /*
-               * Alternamos o FadeSection
-               * para não deixar todas as
-               * sections com exatamente
-               * o mesmo movimento.
-               */
-              if (
-                index % 2 === 1
-              ) {
-                return (
-                  <FadeSection
-                    key={
-                      grupo.slug
-                    }
+                <FadeSection
                     background="black"
-                  >
-                    {conteudo}
-                  </FadeSection>
-                );
-              }
-
-              return (
-                <div
-                  key={
-                    grupo.slug
-                  }
                 >
-                  {conteudo}
-                </div>
-              );
-            }
-          )
-        )}
 
-        <FadeSection
-          background="black"
-        >
-          <InstitutionalSection>
-            <UseSouzContainer>
-              <UseSouzCard />
-            </UseSouzContainer>
-          </InstitutionalSection>
-        </FadeSection>
+                    <InstitutionalSection>
 
-        <FadeSection
-          background="black"
-        >
-          <InstitutionalSection>
-            <WhatsAppContainer>
-              <img
-                src={
-                  atendimentoWhatsApp
-                }
-                alt="Atendimento pelo WhatsApp"
-              />
-            </WhatsAppContainer>
-          </InstitutionalSection>
-        </FadeSection>
-      </Body>
+                        <UseSouzContainer>
 
-      <Footer />
-    </Page>
-  );
+                            <UseSouzCard />
+
+                        </UseSouzContainer>
+
+                    </InstitutionalSection>
+
+                </FadeSection>
+
+
+                <FadeSection
+                    background="black"
+                >
+
+                    <InstitutionalSection>
+
+                        <WhatsAppContainer>
+
+                            <img
+                                src={
+                                    atendimentoWhatsApp
+                                }
+
+                                alt=
+                                    "Atendimento pelo WhatsApp"
+                            />
+
+                        </WhatsAppContainer>
+
+                    </InstitutionalSection>
+
+                </FadeSection>
+
+            </Body>
+
+
+            <Footer />
+
+        </Page>
+
+    );
+
 }

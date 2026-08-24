@@ -11,10 +11,17 @@ import {
     CategoriasContainer
 } from "./categoriasStyles";
 
-import image1 from "../../assets/images/pulseiras.jpg";
-import image2 from "../../assets/images/pingentes.jpg";
-import image3 from "../../assets/images/pingentes2.jpg";
-import image4 from "../../assets/images/corrente2.jpg";
+import image1
+    from "../../assets/images/pulseiras.jpg";
+
+import image2
+    from "../../assets/images/pingentes.jpg";
+
+import image3
+    from "../../assets/images/pingentes2.jpg";
+
+import image4
+    from "../../assets/images/corrente2.jpg";
 
 import {
     TextContainer
@@ -23,6 +30,7 @@ import {
 import {
     useNavigate
 } from "react-router-dom";
+
 
 function Categorias() {
 
@@ -52,15 +60,20 @@ function Categorias() {
         }
     ];
 
+
     function abrirCategoria(
         slug: string
     ) {
+
         navigate(
             `/produtos?category=${slug}`
         );
+
     }
 
+
     return (
+
         <CategoriasContainer>
 
             <TextContainer>
@@ -73,7 +86,9 @@ function Categorias() {
                     (categoria) => (
 
                         <CategoriasCard
-                            key={categoria.slug}
+                            key={
+                                categoria.slug
+                            }
 
                             tabIndex={0}
 
@@ -83,15 +98,19 @@ function Categorias() {
                                 )
                             }
 
-                            onKeyDown={(event) => {
+                            onKeyDown={(
+                                event
+                            ) => {
 
                                 if (
                                     event.key === "Enter" ||
                                     event.key === " "
                                 ) {
+
                                     abrirCategoria(
                                         categoria.slug
                                     );
+
                                 }
 
                             }}
@@ -100,8 +119,12 @@ function Categorias() {
                             <CardImageContainer>
 
                                 <CardImage
-                                    src={categoria.imagem}
-                                    alt={categoria.nome}
+                                    src={
+                                        categoria.imagem
+                                    }
+                                    alt={
+                                        categoria.nome
+                                    }
                                 />
 
                             </CardImageContainer>
@@ -111,7 +134,9 @@ function Categorias() {
                                 <CardTextContainer>
 
                                     <CardTitle>
-                                        {categoria.nome}
+                                        {
+                                            categoria.nome
+                                        }
                                     </CardTitle>
 
                                     <CardSubtitle>
@@ -134,7 +159,9 @@ function Categorias() {
             </CategoriasCardsContainer>
 
         </CategoriasContainer>
+
     );
+
 }
 
 export default Categorias;

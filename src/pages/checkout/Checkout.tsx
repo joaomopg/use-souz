@@ -42,10 +42,6 @@ import {
     createOrder
 } from "../../services/order.service";
 
-import type {
-    Order
-} from "../../types/Order";
-
 import {
     quoteShipping,
     type ShippingOption
@@ -53,7 +49,6 @@ import {
 
 import {
     Actions,
-    AddressGrid,
     BackButton,
     CheckoutContent,
     CheckoutHeader,
@@ -64,13 +59,7 @@ import {
     EmptyCartButton,
     EmptyCartText,
     EmptyCartTitle,
-    Field,
-    FieldFull,
     FormColumn,
-    FormSection,
-    FormSectionTitle,
-    Input,
-    Label,
     OrderItem,
     OrderItemContent,
     OrderItemImage,
@@ -81,15 +70,11 @@ import {
     OrderItemVariation,
     OrderItems,
     Page,
-    PaymentOption,
-    PaymentOptions,
-    RadioInput,
     SummaryColumn,
     SummaryDivider,
     SummaryLine,
     SummaryTotal,
     SummaryTitle,
-    TextArea,
 
 } from "./CheckoutStyles";
 
@@ -221,11 +206,6 @@ export default function Checkout() {
         validade: "",
         cvv: ""
     });
-
-    const [
-        createdOrder,
-        setCreatedOrder
-    ] = useState<Order | null>(null);
 
     const [
         isSubmitting,
@@ -870,10 +850,6 @@ export default function Checkout() {
                     payload
                 );
 
-            setCreatedOrder(
-                order
-            );
-
             console.log(
                 "Pedido criado:",
                 order
@@ -1160,7 +1136,7 @@ export default function Checkout() {
                                 </Actions>
                             </>
                         )}
-                        
+
                     </FormColumn>
 
                     {/* RESUMO DO PEDIDO */}
