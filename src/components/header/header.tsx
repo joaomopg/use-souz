@@ -35,6 +35,10 @@ import {
     useCartDrawer
 } from "../../contexts/cartDrawerContext";
 
+import {
+    useAuth
+} from "../../contexts/AuthContext";
+
 
 function Header() {
 
@@ -56,6 +60,12 @@ function Header() {
         openDrawer
     } = useCartDrawer();
 
+    const {
+        user,
+        logout,
+        isLoading
+    } = useAuth();
+
 
     useEffect(() => {
 
@@ -75,6 +85,13 @@ function Header() {
             );
 
     }, []);
+
+
+    function handleLogout() {
+
+        logout();
+
+    }
 
 
     return (
@@ -172,41 +189,76 @@ function Header() {
                 </svg>
 
 
-                <ButtonsContainer>
+                {!isLoading && (
 
-                    <Link
-                        to="/register"
-                        style={{
-                            textDecoration:
-                                "none"
-                        }}
-                    >
+                    <ButtonsContainer>
 
-                        <Button>
-                            Cadastre-se
-                        </Button>
+                        {user ? (
 
-                    </Link>
+                            <>
+                                <Button
+                                    type="button"
+                                >
+                                    Olá,{" "}
+                                    {
+                                        user.name
+                                            .split(" ")[0]
+                                    }
+                                </Button>
 
-                    |
+                                |
 
-                    <Link
-                        to="/login"
-                        style={{
-                            textDecoration:
-                                "none",
-                            marginLeft:
-                                "10px"
-                        }}
-                    >
+                                <Button
+                                    type="button"
+                                    onClick={
+                                        handleLogout
+                                    }
+                                >
+                                    Sair
+                                </Button>
+                            </>
 
-                        <Button>
-                            Login
-                        </Button>
+                        ) : (
 
-                    </Link>
+                            <>
+                                <Link
+                                    to="/register"
+                                    style={{
+                                        textDecoration:
+                                            "none"
+                                    }}
+                                >
 
-                </ButtonsContainer>
+                                    <Button>
+                                        Cadastre-se
+                                    </Button>
+
+                                </Link>
+
+                                |
+
+                                <Link
+                                    to="/login"
+                                    style={{
+                                        textDecoration:
+                                            "none",
+                                        marginLeft:
+                                            "10px"
+                                    }}
+                                >
+
+                                    <Button>
+                                        Login
+                                    </Button>
+
+                                </Link>
+                            </>
+
+                        )}
+
+                    </ButtonsContainer>
+
+                )}
 
 
                 <ShoppingCart

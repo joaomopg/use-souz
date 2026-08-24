@@ -77,7 +77,7 @@ export function Login() {
     setIsSubmitting(true);
     try {
       await login(formData.email, formData.password);
-      navigate('/catalog');
+      navigate("/produtos");
     } catch (error: any) {
       setGlobalError(
         error?.response?.data?.message || 'Erro ao fazer login. Tente novamente.'

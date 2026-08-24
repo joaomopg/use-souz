@@ -95,7 +95,7 @@ export function Register() {
     setIsSubmitting(true);
     try {
       await register(formData.name, formData.email, formData.password);
-      navigate('/catalog');
+      navigate("/produtos");
     } catch (error: any) {
       setGlobalError(
         error?.response?.data?.message || 'Erro ao cadastrar. Tente novamente.'

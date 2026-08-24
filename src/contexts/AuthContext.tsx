@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useState, useEffect, type ReactNode, useContext } from 'react';
 import { api } from '../services/api';
 
 interface User {
@@ -51,7 +51,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(user);
     localStorage.setItem('@use-souz:token', token);
     localStorage.setItem('@use-souz:user', JSON.stringify(user));
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
   const logout = () => {
@@ -67,4 +66,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+
+    return useContext(
+        AuthContext
+    );
+
 }
