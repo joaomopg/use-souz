@@ -644,8 +644,7 @@ export const OrderItemPrice = styled.strong`
 
     font-size: 0.9rem;
 
-    color:
-        ${({ theme }) => theme.colors.gold};
+    color: #f2f2f2;
 `;
 
 export const SummaryDivider = styled.div`
@@ -1110,4 +1109,47 @@ export const ConfirmationSectionHeader = styled.div`
 
     margin-bottom:
         ${({ theme }) => theme.spacing.lg}px;
+`;
+
+export const ConfirmationContent = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    gap:
+        ${({ theme }) => theme.spacing.sm}px;
+`;
+
+export const ConfirmationItem = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+`;
+
+export const ConfirmationLabel = styled.span`
+    font-family:
+        ${({ theme }) => theme.fonts.body};
+
+    font-size: 0.72rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+
+    color:
+        ${({ theme }) => theme.colors.textMuted};
+`;
+
+export const ConfirmationValue = styled.strong`
+    font-family:
+        ${({ theme }) => theme.fonts.body};
+
+    font-size: 0.92rem;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    color:
+        ${({ theme }) => theme.colors.text};
 `;

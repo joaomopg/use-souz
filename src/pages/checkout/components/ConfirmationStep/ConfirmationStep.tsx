@@ -1,5 +1,9 @@
 import {
+    ConfirmationContent,
+    ConfirmationItem,
+    ConfirmationLabel,
     ConfirmationSectionHeader,
+    ConfirmationValue,
     EditButton,
     FormSection,
     FormSectionTitle
@@ -89,34 +93,57 @@ export default function ConfirmationStep({
 
                 </ConfirmationSectionHeader>
 
-                <div>
+                <ConfirmationContent>
 
-                    <strong>
-                        {
-                            identificationData.nome
-                        }
-                    </strong>
+                    <ConfirmationItem>
 
-                    <p>
-                        {
-                            identificationData.email
-                        }
-                    </p>
+                        <ConfirmationLabel>
+                            Nome
+                        </ConfirmationLabel>
 
-                    <p>
-                        {
-                            identificationData.telefone
-                        }
-                    </p>
+                        <ConfirmationValue>
+                            {identificationData.nome}
+                        </ConfirmationValue>
 
-                    <p>
-                        CPF:{" "}
-                        {
-                            identificationData.cpf
-                        }
-                    </p>
+                    </ConfirmationItem>
 
-                </div>
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            E-mail
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {identificationData.email}
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Telefone
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {identificationData.telefone}
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            CPF
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {identificationData.cpf}
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                </ConfirmationContent>
 
             </FormSection>
 
@@ -139,48 +166,75 @@ export default function ConfirmationStep({
 
                 </ConfirmationSectionHeader>
 
-                <div>
+                <ConfirmationContent>
 
-                    <strong>
-                        {
-                            deliveryData.rua
-                        },{" "}
-                        {
-                            deliveryData.numero
-                        }
-                    </strong>
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Endereço
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {deliveryData.rua},{" "}
+                            {deliveryData.numero}
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
 
                     {deliveryData.complemento && (
-                        <p>
-                            {
-                                deliveryData.complemento
-                            }
-                        </p>
+
+                        <ConfirmationItem>
+
+                            <ConfirmationLabel>
+                                Complemento
+                            </ConfirmationLabel>
+
+                            <ConfirmationValue>
+                                {deliveryData.complemento}
+                            </ConfirmationValue>
+
+                        </ConfirmationItem>
+
                     )}
 
-                    <p>
-                        {
-                            deliveryData.bairro
-                        }
-                    </p>
+                    <ConfirmationItem>
 
-                    <p>
-                        {
-                            deliveryData.cidade
-                        } -{" "}
-                        {
-                            deliveryData.estado
-                        }
-                    </p>
+                        <ConfirmationLabel>
+                            Bairro
+                        </ConfirmationLabel>
 
-                    <p>
-                        CEP:{" "}
-                        {
-                            deliveryData.cep
-                        }
-                    </p>
+                        <ConfirmationValue>
+                            {deliveryData.bairro}
+                        </ConfirmationValue>
 
-                </div>
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Cidade
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {deliveryData.cidade} -{" "}
+                            {deliveryData.estado}
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            CEP
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {deliveryData.cep}
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                </ConfirmationContent>
 
             </FormSection>
 
@@ -203,36 +257,56 @@ export default function ConfirmationStep({
 
                 </ConfirmationSectionHeader>
 
-                <div>
+                <ConfirmationContent>
 
-                    <strong>
-                        {
-                            selectedShipping.name
-                        }
-                    </strong>
+                    <ConfirmationItem>
 
-                    <p>
-                        Entrega em até{" "}
-                        {
-                            selectedShipping.deliveryTimeDays
-                        }{" "}
-                        dias úteis
-                    </p>
+                        <ConfirmationLabel>
+                            Modalidade
+                        </ConfirmationLabel>
 
-                    <p>
-                        {
-                            selectedShipping.price
-                                .toLocaleString(
-                                    "pt-BR",
-                                    {
-                                        style: "currency",
-                                        currency: "BRL"
-                                    }
-                                )
-                        }
-                    </p>
+                        <ConfirmationValue>
+                            {selectedShipping.name}
+                        </ConfirmationValue>
 
-                </div>
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Prazo
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            Até{" "}
+                            {selectedShipping.deliveryTimeDays}{" "}
+                            dias úteis
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Valor
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {
+                                selectedShipping.price
+                                    .toLocaleString(
+                                        "pt-BR",
+                                        {
+                                            style: "currency",
+                                            currency: "BRL"
+                                        }
+                                    )
+                            }
+                        </ConfirmationValue>
+
+                    </ConfirmationItem>
+
+                </ConfirmationContent>
 
             </FormSection>
 
@@ -255,25 +329,37 @@ export default function ConfirmationStep({
 
                 </ConfirmationSectionHeader>
 
-                <div>
+                <ConfirmationContent>
 
-                    <strong>
-                        {
-                            paymentMethod === "pix"
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Método
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {paymentMethod === "pix"
                                 ? "PIX"
-                                : "Cartão de crédito"
-                        }
-                    </strong>
+                                : "Cartão"}
+                        </ConfirmationValue>
 
-                    <p>
-                        {
-                            paymentMethod === "pix"
+                    </ConfirmationItem>
+
+                    <ConfirmationItem>
+
+                        <ConfirmationLabel>
+                            Informações
+                        </ConfirmationLabel>
+
+                        <ConfirmationValue>
+                            {paymentMethod === "pix"
                                 ? "O código PIX será gerado após a confirmação do pedido."
-                                : "O pagamento será realizado com cartão de crédito."
-                        }
-                    </p>
+                                : "O pagamento será realizado com cartão."}
+                        </ConfirmationValue>
 
-                </div>
+                    </ConfirmationItem>
+
+                </ConfirmationContent>
 
             </FormSection>
         </>

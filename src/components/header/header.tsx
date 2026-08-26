@@ -5,11 +5,20 @@ import {
     SearchContainer,
     RegisterLoginContainer,
     ButtonsContainer,
-    Button
+    Button,
+    UserGreeting,
+    Separator,
+    UserArea,
+    UserIconWrapper,
+    UserInfo,
+    UserName,
+    LogoutButton,
+    UserOrdersLabel
 } from "./headerStyles";
 
 import {
-    Link
+    Link,
+    useNavigate
 } from "react-router-dom";
 
 import {
@@ -66,6 +75,9 @@ function Header() {
         isLoading
     } = useAuth();
 
+    const navigate =
+        useNavigate();
+
 
     useEffect(() => {
 
@@ -90,6 +102,14 @@ function Header() {
     function handleLogout() {
 
         logout();
+
+    }
+
+    function abrirMeusPedidos() {
+
+        navigate(
+            "/meus-pedidos"
+        );
 
     }
 
@@ -122,10 +142,9 @@ function Header() {
                         cardRef
                     }
                     className={
-                        `card ${
-                            isActive
-                                ? "active"
-                                : ""
+                        `card ${isActive
+                            ? "active"
+                            : ""
                         }`
                     }
                 >
@@ -173,21 +192,7 @@ function Header() {
 
             </SearchContainer>
 
-
             <RegisterLoginContainer>
-
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="32"
-                    height="32"
-                    fill="currentColor"
-                >
-                    <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm0 15c-2.33 0-4.43-.95-5.96-2.48.16-2.02 4-3.12 5.96-3.12 1.95 0 5.8 1.1 5.96 3.12A8.45 8.45 0 0112 20z"
-                    />
-                </svg>
-
 
                 {!isLoading && (
 
@@ -196,31 +201,61 @@ function Header() {
                         {user ? (
 
                             <>
-                                <Button
-                                    type="button"
-                                >
-                                    Olá,{" "}
-                                    {
-                                        user.name
-                                            .split(" ")[0]
+
+                                <UserArea
+                                    onClick={
+                                        abrirMeusPedidos
                                     }
-                                </Button>
+                                >
 
-                                |
+                                    <UserIconWrapper>
 
-                                <Button
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            width="22"
+                                            height="22"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm0 15c-2.33 0-4.43-.95-5.96-2.48.16-2.02 4-3.12 5.96-3.12 1.95 0 5.8 1.1 5.96 3.12A8.45 8.45 0 0112 20z"
+                                            />
+                                        </svg>
+
+                                    </UserIconWrapper>
+
+                                    <UserInfo>
+
+                                        <UserName>
+                                            {
+                                                user.name
+                                                    .split(" ")[0]
+                                            }
+                                        </UserName>
+
+                                        <UserOrdersLabel>
+                                            Meus pedidos
+                                        </UserOrdersLabel>
+
+                                    </UserInfo>
+
+                                </UserArea>
+
+                                <LogoutButton
                                     type="button"
                                     onClick={
                                         handleLogout
                                     }
                                 >
                                     Sair
-                                </Button>
+                                </LogoutButton>
+
                             </>
 
                         ) : (
 
                             <>
+
                                 <Link
                                     to="/register"
                                     style={{
@@ -235,15 +270,11 @@ function Header() {
 
                                 </Link>
 
-                                |
-
                                 <Link
                                     to="/login"
                                     style={{
                                         textDecoration:
-                                            "none",
-                                        marginLeft:
-                                            "10px"
+                                            "none"
                                     }}
                                 >
 
@@ -252,6 +283,7 @@ function Header() {
                                     </Button>
 
                                 </Link>
+
                             </>
 
                         )}

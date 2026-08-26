@@ -1,166 +1,493 @@
 import styled from "styled-components";
 
-export const HeaderContainer = styled.div`
+export const HeaderContainer = styled.header`
     width: 100%;
-    height: 60px;
-    padding: 0px 200px;
+    height: 64px;
+
+    padding: 0 190px;
+
     box-sizing: border-box;
-    display: flex;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 1fr)
+        minmax(320px, 1.4fr)
+        minmax(300px, 1fr);
+
     align-items: center;
-    background-color: black;
+
+    gap: 24px;
+
+    background-color: #000;
+
     position: fixed;
-    z-index: 8;
+
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+
+    border-bottom:
+        1px solid rgba(189, 159, 103, 0.12);
+
 
     .content .logo {
-    height: 35px;
-    position: relative;
-    display: flex;
-    gap: 8px; /* Espaçamento perfeito e controlado entre USE e SOUZ */
-    align-items: center;
-    width: max-content; /* Ocupa exatamente o tamanho do texto interno */
-    max-width: 58px;    /* Força o corte inicial para exibir apenas o "USE" */
-    overflow: hidden;
-    transition: max-width 0.8s ease-in-out; /* Animamos o max-width em vez do width fixo */
-  }
+        height: 35px;
 
-  /* Removido position absolute para permitir o cálculo automático de centro */
-  .logo1 {
-    font-family: 'Montserrat', 'Arial Black', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    color: #bd9f67;
-    line-height: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    white-space: nowrap;
-  }
+        position: relative;
 
-  .logo1 .underline {
-    width: 100%;
-    height: 3px;
-    background-color: #bd9f67;
-    border-radius: 2px;
-  }
+        display: flex;
 
-  /* Removido o 'left: 65px' fixo. Agora ele se posiciona sozinho após o gap */
-  .logo2 {
-    font-family: 'Montserrat', 'Arial Black', sans-serif;
-    font-weight: 900;
-    font-size: 22px;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1px #bd9f67;
-    white-space: nowrap;
-  }
+        gap: 8px;
 
-  .content {
-    transition: all 0.5s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-  }
+        align-items: center;
 
-  .content .logo .trail {
-    position: absolute;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-  }
+        width: max-content;
 
-  /* --- GATILHOS DO SCROLL ACTIVED --- */
+        max-width: 58px;
 
-  /* Modificação aqui: Abrimos o limite para um valor maior (ex: 300px). 
-     O 'width: max-content' vai frear a expansão no tamanho exato das letras, 
-     garantindo simetria perfeita dos dois lados. */
-  .card.active .logo {
-    max-width: 300px; 
-    animation: opacity 0.8s ease-in-out;
-  }
+        overflow: hidden;
 
-  .card.active .content .logo-bottom-text {
-    opacity: 1;
-    letter-spacing: 6px;
-  }
-
-  .card.active .trail {
-    animation: trail 0.8s ease-in-out;
-  }
-
-  @keyframes opacity {
-    0% { border-right: 1px solid transparent; }
-    10% { border-right: 1px solid #bd9f67; }
-    80% { border-right: 1px solid #bd9f67; }
-    100% { border-right: 1px solid transparent; }
-  }
-
-  @keyframes trail {
-    0% {
-      background: linear-gradient(90deg, rgba(189, 159, 103, 0) 90%, rgb(189, 159, 103) 100%);
-      opacity: 0;
+        transition:
+            max-width 0.8s ease-in-out;
     }
-    30% {
-      background: linear-gradient(90deg, rgba(189, 159, 103, 0) 70%, rgb(189, 159, 103) 100%);
-      opacity: 1;
+
+
+    .logo1 {
+        font-family:
+            "Montserrat",
+            "Arial Black",
+            sans-serif;
+
+        font-weight: 900;
+
+        font-size: 22px;
+
+        color: #bd9f67;
+
+        line-height: 1;
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 2px;
+
+        white-space: nowrap;
     }
-    70% {
-      background: linear-gradient(90deg, rgba(189, 159, 103, 0) 70%, rgb(189, 159, 103) 100%);
-      opacity: 1;
+
+
+    .logo1 .underline {
+        width: 100%;
+        height: 3px;
+
+        background-color: #bd9f67;
+
+        border-radius: 2px;
     }
-    95% {
-      background: linear-gradient(90deg, rgba(189, 159, 103, 0) 90%, rgb(189, 159, 103) 100%);
-      opacity: 0;
+
+
+    .logo2 {
+        font-family:
+            "Montserrat",
+            "Arial Black",
+            sans-serif;
+
+        font-weight: 900;
+
+        font-size: 22px;
+
+        line-height: 1;
+
+        color: transparent;
+
+        -webkit-text-stroke:
+            1px #bd9f67;
+
+        white-space: nowrap;
     }
-  }
-`
+
+
+    .content {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        transition:
+            all 0.5s ease-in-out;
+    }
+
+
+    .content .logo .trail {
+        position: absolute;
+
+        right: 0;
+
+        height: 100%;
+        width: 100%;
+
+        opacity: 0;
+    }
+
+
+    .card.active .logo {
+        max-width: 300px;
+
+        animation:
+            opacity 0.8s ease-in-out;
+    }
+
+
+    .card.active .content .logo-bottom-text {
+        opacity: 1;
+
+        letter-spacing: 6px;
+    }
+
+
+    .card.active .trail {
+        animation:
+            trail 0.8s ease-in-out;
+    }
+
+
+    @keyframes opacity {
+
+        0% {
+            border-right:
+                1px solid transparent;
+        }
+
+        10% {
+            border-right:
+                1px solid #bd9f67;
+        }
+
+        80% {
+            border-right:
+                1px solid #bd9f67;
+        }
+
+        100% {
+            border-right:
+                1px solid transparent;
+        }
+
+    }
+
+
+    @keyframes trail {
+
+        0% {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(189, 159, 103, 0) 90%,
+                    rgb(189, 159, 103) 100%
+                );
+
+            opacity: 0;
+        }
+
+        30% {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(189, 159, 103, 0) 70%,
+                    rgb(189, 159, 103) 100%
+                );
+
+            opacity: 1;
+        }
+
+        70% {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(189, 159, 103, 0) 70%,
+                    rgb(189, 159, 103) 100%
+                );
+
+            opacity: 1;
+        }
+
+        95% {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(189, 159, 103, 0) 90%,
+                    rgb(189, 159, 103) 100%
+                );
+
+            opacity: 0;
+        }
+
+    }
+
+
+    @media (
+        max-width: 1400px
+    ) {
+        padding:
+            0 80px;
+
+        grid-template-columns:
+            minmax(220px, 1fr)
+            minmax(280px, 1.2fr)
+            minmax(260px, 1fr);
+    }
+
+
+    @media (
+        max-width: 1000px
+    ) {
+        padding:
+            0 24px;
+
+        grid-template-columns:
+            auto
+            1fr
+            auto;
+
+        gap: 14px;
+    }
+`;
+
 
 export const LogoNameContainer = styled.div`
-    flex: 1;
+    min-width: 0;
+
     display: flex;
+
     align-items: center;
-`
+
+    gap: 10px;
+`;
+
+
+export const LogoLink = styled.a`
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+`;
+
 
 export const LogoImg = styled.img`
-    width: 56px;
-    height: 56px;
-`
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    object-fit: contain;
+
+    display: block;
+
+    border-radius: 2px;
+`;
+
 
 export const SearchContainer = styled.div`
-    flex: 2;
+    min-width: 0;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-`
+`;
+
 
 export const RegisterLoginContainer = styled.div`
-    flex: 1;
+    min-width: 0;
+
     height: 100%;
+
     display: flex;
+
     align-items: center;
-    justify-content: end;
-    
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+
     svg {
-        color: #8b6c2e;
-        margin-right: 10px;
+        flex-shrink: 0;
+
+        color: #a4823c;
+
+        margin: 0;
     }
-`
+`;
+
 
 export const ButtonsContainer = styled.div`
     display: flex;
+
     align-items: center;
-    color: white;
+
+    gap: 10px;
+
+    color: #fff;
+
     font-size: 14px;
-`
+
+    white-space: nowrap;
+`;
+
+
+export const UserGreeting = styled.span`
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: #f2f2f2;
+
+    font-size: 0.85rem;
+
+    white-space: nowrap;
+
+
+    strong {
+        color: #bd9f67;
+
+        font-weight: 700;
+    }
+`;
+
+
+export const Separator = styled.span`
+    color:
+        rgba(255, 255, 255, 0.35);
+`;
+
 
 export const Button = styled.button`
     width: auto;
-    height: 46px;
-    margin-right: 10px;
-    padding: none;
-    outline: none;
+    height: 38px;
+
+    padding: 0 4px;
+
     border: none;
-    background-color: transparent;
-    color: white;
+    outline: none;
+
+    background: transparent;
+
+    color: #f2f2f2;
+
+    font-family: inherit;
+
+    font-size: 0.85rem;
+
     cursor: pointer;
-`
+
+    white-space: nowrap;
+
+    transition:
+        color 0.2s ease;
+
+
+    &:hover {
+        color: #bd9f67;
+    }
+`;
+
+export const UserOrdersLabel = styled.span`
+    font-size: 0.7rem;
+
+    color:
+        rgba(255, 255, 255, 0.5);
+
+    transition:
+        color 0.2s ease;
+`;
+
+export const UserArea = styled.div`
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 6px 10px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease;
+
+    &:hover {
+        background:
+            rgba(189, 159, 103, 0.08);
+
+        ${UserOrdersLabel} {
+            color: #bd9f67;
+        }
+    }
+`;
+
+export const UserIconWrapper = styled.div`
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(189, 159, 103, 0.12);
+
+    color: #bd9f67;
+`;
+
+export const UserInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    gap: 1px;
+`;
+
+export const UserName = styled.span`
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    color: #f3f3f3;
+
+    white-space: nowrap;
+`;
+
+export const LogoutButton = styled.button`
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color:
+        rgba(255, 255, 255, 0.5);
+
+    font-size: 0.7rem;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease;
+
+    &:hover {
+        color: #bd9f67;
+    }
+`;

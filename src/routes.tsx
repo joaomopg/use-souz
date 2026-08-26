@@ -23,6 +23,10 @@ import {
 import {
   Login
 } from "./pages/Login/Login";
+import MyOrders from "./pages/MyOrders/MyOrders";
+
+import ProtectedRoute
+  from "./components/ProtectedRoute/ProtectedRoute";
 
 
 function AppRoutes() {
@@ -54,6 +58,15 @@ function AppRoutes() {
       <Route
         path="/pedido/:codigo/sucesso"
         element={<OrderSuccess />}
+      />
+
+      <Route
+        path="/meus-pedidos"
+        element={
+          <ProtectedRoute>
+            <MyOrders />
+          </ProtectedRoute>
+        }
       />
 
       <Route

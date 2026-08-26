@@ -13,19 +13,17 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
-          <App />
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: '#1a1a1a',
-                border: '1px solid rgba(212, 175, 55, 0.2)',
-                color: '#ffffff',
-              },
-            }}
-          />
-        </CartProvider>
+        <App />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: '#1a1a1a',
+              border: '1px solid rgba(212, 175, 55, 0.2)',
+              color: '#ffffff',
+            },
+          }}
+        />
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
